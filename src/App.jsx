@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
+import Dashboard from './pages/Dashboard'; 
 import GoalTracker from './pages/GoalTracker';
 import './index.css';
 
@@ -20,6 +21,7 @@ function App() {
         <Sidebar isCollapsed={isSidebarCollapsed} onToggle={handleSidebarToggle} />
         <div className="main-content">
           <Routes>
+            <Route path="/" element={<Dashboard />} />
             <Route path="/goals-tracker" element={<GoalTracker />} />
             {/* Additional routes can be added later */}
           </Routes>
