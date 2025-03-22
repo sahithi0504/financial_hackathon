@@ -251,4 +251,9 @@
     font-size: 1.2rem;
     margin-right: 20px;
   }
+
+  .sidebar-collapsed .main-content {
+    margin-left: 80px; /* Adjusted width when sidebar is collapsed */
+  }
+  
   
