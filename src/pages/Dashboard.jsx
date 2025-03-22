@@ -111,7 +111,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   // For Risk Score (example)
-  const riskScore = 9;
+  const riskScore = 19;
 
   // 1) LOAD & PARSE CSV ON MOUNT
   useEffect(() => {

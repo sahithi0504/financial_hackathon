@@ -1,207 +1,161 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import {
+  FaPlus,
+  FaTrash,
+  FaEdit,
+  FaMoneyBill,
+  FaChartLine,
+  FaFileInvoiceDollar,
+} from "react-icons/fa";
 import "./GoalTracker.css";
 
-const GoalsTracker = () => {
+const GoalTracker = () => {
   const [goals, setGoals] = useState([
     {
       id: 1,
+      icon: <FaMoneyBill />,
       title: "Maintain monthly revenue > $10K",
       target: 10000,
       actual: 9300,
-      metric: "Revenue",
-      comparison: ">",
       timeframe: "March 2025",
-      status: "In Progress"
     },
     {
       id: 2,
-      title: "Increase profit > $5000",
-      target: 5000,
-      actual: 6000,
-      metric: "Profit",
-      comparison: ">",
-      timeframe: "Q1 2025",
-      status: "Met"
+      icon: <FaFileInvoiceDollar />,
+      title: "Analyze invoices for unpaid bills",
+      target: 100,
+      actual: 85,
+      timeframe: "March 2025",
     },
     {
       id: 3,
-      title: "Reduce expenses < $2000",
-      target: 2000,
-      actual: 2500,
-      metric: "Expenses",
-      comparison: "<",
-      timeframe: "March 2025",
-      status: "Missed"
+      icon: <FaChartLine />,
+      title: "Track profit margin improvements",
+      target: 5000,
+      actual: 6000,
+      timeframe: "Q1 2025",
     },
   ]);
 
   const [showModal, setShowModal] = useState(false);
   const [newGoal, setNewGoal] = useState({
+    icon: "revenue",
     title: "",
     target: "",
-    metric: "Revenue",
-    comparison: ">",
-    timeframe: ""
+    actual: "",
+    timeframe: "",
   });
-  const [filter, setFilter] = useState("All");
+
+  const iconOptions = {
+    revenue: <FaMoneyBill />,
+    invoices: <FaFileInvoiceDollar />,
+    profit: <FaChartLine />,
+  };
 
   const openModal = () => setShowModal(true);
   const closeModal = () => {
     setShowModal(false);
-    setNewGoal({
-      title: "",
-      target: "",
-      metric: "Revenue",
-      comparison: ">",
-      timeframe: ""
-    });
+    setNewGoal({ icon: "revenue", title: "", target: "", actual: "", timeframe: "" });
   };
 
-  const handleNewGoalChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewGoal({ ...newGoal, [name]: value });
+    setNewGoal((prev) => ({ ...prev, [name]: value }));
   };
 
   const addGoal = () => {
-    const id = goals.length ? goals[goals.length - 1].id + 1 : 1;
-    // For new goals, actual value is set to 0.
-    const targetValue = parseFloat(newGoal.target);
-    let status = "In Progress";
-    const actualValue = 0;
-    if (newGoal.comparison === ">" && actualValue >= targetValue) {
-      status = "Met";
-    } else if (newGoal.comparison === "<" && actualValue <= targetValue) {
-      status = "Met";
-    } else if (newGoal.comparison === "=" && actualValue === targetValue) {
-      status = "Met";
-    }
-
-    const goal = {
-      id,
-      title: newGoal.title,
-      target: targetValue,
-      actual: actualValue,
-      metric: newGoal.metric,
-      comparison: newGoal.comparison,
-      timeframe: newGoal.timeframe,
-      status,
-    };
-
-    setGoals([...goals, goal]);
+    const id = Date.now();
+    const icon = iconOptions[newGoal.icon] || <FaMoneyBill />;
+    setGoals([...goals, { ...newGoal, id, icon, target: +newGoal.target, actual: +newGoal.actual }]);
     closeModal();
   };
 
   const deleteGoal = (id) => {
-    setGoals(goals.filter(goal => goal.id !== id));
+    setGoals(goals.filter((goal) => goal.id !== id));
   };
 
   const calculateProgress = (goal) => {
-    let progress = (goal.actual / goal.target) * 100;
-    if (progress > 100) progress = 100;
-    return progress.toFixed(0);
+    const pct = Math.min((goal.actual / goal.target) * 100, 100);
+    return Math.floor(pct);
   };
 
-  const filteredGoals = goals.filter(goal => {
-    if (filter === "All") return true;
-    return goal.status === filter;
-  });
-
-  const countGoalsByStatus = (status) => {
-    return goals.filter(goal => goal.status === status).length;
+  const getProgressColor = (pct) => {
+    if (pct < 40) return "red";
+    if (pct < 70) return "orange";
+    return "green";
   };
 
   return (
-    <div className="goals-tracker">
-      <header className="header">
-        <h1>Goals Tracker</h1>
-        <div className="header-actions">
-          <button className="add-goal-button" onClick={openModal}>+ Add New Goal</button>
-          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="All">All Goals</option>
-            <option value="Met">Met</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Missed">Missed</option>
-          </select>
-        </div>
-      </header>
+    <div className="goal-tracker">
+      <div className="header">
+        <h2>Goal Tracker</h2>
+        <button className="add-btn" onClick={openModal}>
+          <FaPlus /> Add Goal
+        </button>
+      </div>
 
-      <section className="summary">
-        <div>Total Goals: {goals.length}</div>
-        <div>Met: {countGoalsByStatus("Met")} ✅</div>
-        <div>In Progress: {countGoalsByStatus("In Progress")} 🟡</div>
-        <div>Missed: {countGoalsByStatus("Missed")} ❌</div>
-      </section>
-
-      <section className="goals-list">
-        {filteredGoals.map(goal => (
-          <div key={goal.id} className={`goal-card ${goal.status.toLowerCase().replace(" ", "-")}`}>
-            <h3>{goal.title}</h3>
-            <p>Target: ${goal.target}</p>
-            <p>Actual: ${goal.actual}</p>
-            <div className="progress-bar">
-              <div className="progress" style={{ width: `${calculateProgress(goal)}%` }}></div>
+      <div className="goal-grid">
+        {goals.map((goal) => {
+          const pct = calculateProgress(goal);
+          return (
+            <div className="goal-card" key={goal.id}>
+              <div className="goal-header">
+                <span className="goal-icon">{goal.icon}</span>
+                <h4>{goal.title}</h4>
+              </div>
+              <p className="goal-meta">Target: ${goal.target}</p>
+              <p className="goal-meta">Actual: ${goal.actual}</p>
+              <div className="progress-bar">
+                <div
+                  className="progress-fill"
+                  style={{
+                    width: `${pct}%`,
+                    backgroundColor: getProgressColor(pct),
+                  }}
+                ></div>
+              </div>
+              <p className="goal-percentage">{pct}% achieved</p>
+              <p className="goal-timeframe">Timeframe: {goal.timeframe}</p>
+              <div className="goal-actions">
+                <button className="edit-btn"><FaEdit /></button>
+                <button className="delete-btn" onClick={() => deleteGoal(goal.id)}><FaTrash /></button>
+              </div>
             </div>
-            <p>Status: {goal.status}</p>
-            <p>Timeframe: {goal.timeframe}</p>
-            <div className="goal-actions">
-              <button className="edit-button">✏️</button>
-              <button className="delete-button" onClick={() => deleteGoal(goal.id)}>🗑️</button>
-            </div>
-          </div>
-        ))}
-      </section>
+          );
+        })}
+      </div>
 
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>Add New Goal</h2>
+            <h3>New Goal</h3>
             <div className="form-group">
-              <label>Goal Name</label>
-              <input
-                type="text"
-                name="title"
-                value={newGoal.title}
-                onChange={handleNewGoalChange}
-              />
+              <label>Icon Type</label>
+              <select name="icon" value={newGoal.icon} onChange={handleChange}>
+                <option value="revenue">Revenue</option>
+                <option value="invoices">Invoices</option>
+                <option value="profit">Profit</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Goal Title</label>
+              <input type="text" name="title" value={newGoal.title} onChange={handleChange} />
             </div>
             <div className="form-group">
               <label>Target Amount</label>
-              <input
-                type="number"
-                name="target"
-                value={newGoal.target}
-                onChange={handleNewGoalChange}
-              />
+              <input type="number" name="target" value={newGoal.target} onChange={handleChange} />
             </div>
             <div className="form-group">
-              <label>Metric Type</label>
-              <select name="metric" value={newGoal.metric} onChange={handleNewGoalChange}>
-                <option value="Revenue">Revenue</option>
-                <option value="Profit">Profit</option>
-                <option value="Invoices">Invoices</option>
-              </select>
+              <label>Current Actual</label>
+              <input type="number" name="actual" value={newGoal.actual} onChange={handleChange} />
             </div>
             <div className="form-group">
-              <label>Comparison Type</label>
-              <select name="comparison" value={newGoal.comparison} onChange={handleNewGoalChange}>
-                <option value=">">{'>'}</option>
-                <option value="<">{'<'}</option>
-                <option value="=">{'='}</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Target Time Period</label>
-              <input
-                type="text"
-                name="timeframe"
-                placeholder="e.g., March 2025"
-                value={newGoal.timeframe}
-                onChange={handleNewGoalChange}
-              />
+              <label>Timeframe</label>
+              <input type="text" name="timeframe" value={newGoal.timeframe} onChange={handleChange} />
             </div>
             <div className="modal-actions">
-              <button className="save-button" onClick={addGoal}>✅ Save</button>
-              <button className="cancel-button" onClick={closeModal}>❌ Cancel</button>
+              <button className="save-btn" onClick={addGoal}>Save</button>
+              <button className="cancel-btn" onClick={closeModal}>Cancel</button>
             </div>
           </div>
         </div>
@@ -210,4 +164,4 @@ const GoalsTracker = () => {
   );
 };
 
-export default GoalsTracker;
+export default GoalTracker;
