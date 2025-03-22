@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 
 # load & scale data
-df = pd.read_csv("/Users/chloegray/Documents/GitHub/financial_hackathon/models/costco_stock_data.csv")
+df = pd.read_csv("costco_stock_data.csv")
 df['Date'] = pd.to_datetime(df['Date'])
 df.sort_values('Date', inplace=True)
 df.reset_index(drop=True, inplace=True)
@@ -80,7 +80,7 @@ print("X_test_tensor:", X_test_tensor.shape)
 print("y_test_tensor:", y_test_tensor.shape)
 
 
-# define a simple LSTM model
+# define a LSTM model
 class LSTMModel(nn.Module):
     def __init__(self, input_size=5, hidden_size=128, num_layers=2, dropout=0.2, forecast_horizon=7):
         super(LSTMModel, self).__init__()

@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # load the data
-df = pd.read_csv("/Users/chloegray/Documents/GitHub/hackathon/models/aggregated_invoice_data.csv")
+df = pd.read_csv("aggregated_invoice_data.csv")
 print("data loaded:")
 print(df.head())
 

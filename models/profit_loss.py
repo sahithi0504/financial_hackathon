@@ -9,7 +9,7 @@ import warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 # load the dataset
-df = pd.read_csv("/Users/chloegray/Documents/GitHub/financial_hackathon/models/costco_profit.csv")
+df = pd.read_csv("costco_profit.csv")
 df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%y')
 df.set_index('Date', inplace=True)
 
