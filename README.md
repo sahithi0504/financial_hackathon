@@ -1,24 +1,18 @@
-# Financial Hackathon
+<<<<<<< HEAD
 
-This is a React + Vite project for the Hackathon.
+# React + Vite
 
-## Getting Started
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-### Prerequisites
+Currently, two official plugins are available:
 
-- Node.js
-- npm
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-### Clone the Repository
+## Expanding the ESLint configuration
 
-```bash
-git clone https://github.com/sahithi0504/financial_hackathon.git
-cd financial_hackathon
+# If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 
-### Install Dependencies
-npm install
+# financial_hackathon
 
-### Start the Development Server
-npm run dev
-
-```
+> > > > > > > fa3bd8ed46c181bffe45d91622d8bcfdf6f94545
