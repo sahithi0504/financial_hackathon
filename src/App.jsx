@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard'; 
 import GoalTracker from './pages/GoalTracker';
 import UploadData from './pages/UploadData';
+import Settings from './pages/Settings';
 import './index.css';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/goals-tracker" element={<GoalTracker />} />
             <Route path="/upload-data" element={<UploadData />} />
+            <Route path="/settings" element={<Settings />} />
             {/* Additional routes can be added later */}
           </Routes>
         </div>
