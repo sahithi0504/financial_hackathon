@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Papa from "papaparse";
 import {
+  BarChart,
+  Bar,
   LineChart,
   Line,
   XAxis,
@@ -12,21 +15,10 @@ import {
 } from "recharts";
 import "./Dashboard.css";
 
-// =================== SAMPLE DATA ===================
-const profitLossData = [
-  { name: "Jan", revenue: 12000, expenses: 9000 },
-  { name: "Feb", revenue: 15000, expenses: 11000 },
-  { name: "Mar", revenue: 14000, expenses: 10000 },
-  { name: "Apr", revenue: 18000, expenses: 13000 },
-  { name: "May", revenue: 20000, expenses: 16000 },
-];
-
-const stockData = [
-  { name: "Mon", stock: 120 },
-  { name: "Tue", stock: 115 },
-  { name: "Wed", stock: 123 },
-  { name: "Thu", stock: 130 },
-  { name: "Fri", stock: 127 },
+// =================== GOALS & INVOICES (unchanged) ===================
+const goals = [
+  { label: "Increase Revenue", goal: 15000, current: 12000 },
+  { label: "Reduce Expenses", goal: 8000, current: 7000 },
 ];
 
 const invoices = [
@@ -35,53 +27,42 @@ const invoices = [
   { id: "INV-003", client: "Gamma Inc", amount: "$7,600", status: "Overdue" },
 ];
 
-const cardsData = [
-  { title: "Monthly Revenue", value: "$125,430", change: "↑ 8.2% from last month" },
-  { title: "Expenses", value: "$87,210", change: "↓ 2.1% from last month" },
-  { title: "Net Profit", value: "$38,220", change: "↑ 12.4% from last month" },
+// =================== PLACEHOLDER STOCK DATA ===================
+const stockData = [
+  { name: "Mon", stock: 120 },
+  { name: "Tue", stock: 175 },
+  { name: "Wed", stock: 93 },
+  { name: "Thu", stock: 137 },
+  { name: "Fri", stock: 107 },
+  { name: "Sat", stock: 157 },
+  { name: "Sun", stock: 139 },
 ];
 
-const goals = [
-  { label: "Increase Revenue", goal: 15000, current: 12000 },
-  { label: "Reduce Expenses", goal: 8000, current: 7000 },
-];
-
-// =================== RISK HELPER (COLOR + LABEL) ===================
-function getRiskData(percentage) {
-  // Default to Low
-  let label = "Low";
-  let color = "#10B981"; // Green
-
-  if (percentage >= 80) {
-    label = "High";
-    color = "#EF4444"; // Red
-  } else if (percentage >= 40) {
-    label = "Medium";
-    color = "#F59E0B"; // Yellow
-  }
-
-  return { label, color };
+// =================== RISK SCORE (example) ===================
+function getRiskColorByPercentage(percentage) {
+  if (percentage >= 80) return "#EF4444"; // High
+  if (percentage >= 40) return "#F59E0B"; // Medium
+  return "#10B981"; // Low
 }
 
-// =================== DOTTED CIRCULAR PROGRESS ===================
+// New helper to get text label for risk
+function getRiskLabel(percentage) {
+  if (percentage >= 80) return "High";
+  if (percentage >= 40) return "Medium";
+  return "Low";
+}
+
 function DottedCircularProgress({
-  percentage = 75,
+  percentage = 85,
   size = 100,
-  segments = 20,    // Number of dots
-  dotRadius = 4,    // Size of each dot
+  segments = 20,
+  dotRadius = 4,
 }) {
-  // how many dots are "active"?
   const activeCount = Math.round((percentage / 100) * segments);
-
-  // figure out color + label automatically
-  const { label: riskLabel, color: activeColor } = getRiskData(percentage);
-
-  // place the ring
+  const activeColor = getRiskColorByPercentage(percentage);
+  const inactiveColor = "#e5e7eb";
   const ringRadius = size / 2 - dotRadius - 2;
   const center = size / 2;
-  const inactiveColor = "#e5e7eb";
-
-  // build array of dot indices
   const dots = Array.from({ length: segments }, (_, i) => i);
 
   return (
@@ -93,7 +74,6 @@ function DottedCircularProgress({
         const fillColor = i < activeCount ? activeColor : inactiveColor;
         return <circle key={i} cx={x} cy={y} r={dotRadius} fill={fillColor} />;
       })}
-      {/* Centered text (percentage) */}
       <text
         x="50%"
         y="50%"
@@ -126,17 +106,64 @@ function Card({ title, value, change }) {
 
 // =================== MAIN DASHBOARD ===================
 export default function Dashboard() {
-  // riskScore is a percentage from 0 to 100
-  const riskScore = 100; // Try changing to 20, 50, 90, etc.
+  // CSV-based data for Profit & Loss
+  const [plData, setPlData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // We automatically determine risk color & label from the percentage
-  const { label: riskLabel } = getRiskData(riskScore);
+  // For Risk Score (example)
+  const riskScore = 9;
+
+  // 1) LOAD & PARSE CSV ON MOUNT
+  useEffect(() => {
+    fetch("/quarterly_data.csv")
+      .then((response) => response.text())
+      .then((csvString) => {
+        const parsed = Papa.parse(csvString, { header: true });
+        const rows = parsed.data
+          .filter((row) => row["Date "] || row["Date"])
+          .map((row) => {
+            const rawDate = row["Date "] || row["Date"] || "";
+            const date = rawDate.trim();
+
+            const rawRevenue = (row["Revenue"] || "0").replace(/,/g, "");
+            const rawExpenses = (row["Operating Expenses"] || "0").replace(/,/g, "");
+            const rawNetIncome = (row["Net Income"] || "0").replace(/,/g, "");
+
+            return {
+              date,
+              revenue: Number(rawRevenue),
+              expenses: Number(rawExpenses),
+              netIncome: Number(rawNetIncome),
+            };
+          });
+
+        setPlData(rows);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error loading CSV:", err);
+        setLoading(false);
+      });
+  }, []);
+
+  // 2) DERIVE QUARTERLY VALUES from the LATEST ROW
+  let quarterlyRevenue = "$0";
+  let quarterlyExpenses = "$0";
+  let quarterlyNetIncome = "$0";
+  let quarterlyChange = "↑ 5.2% from last quarter";
+
+  if (plData.length > 0) {
+    const lastRow = plData[plData.length - 1];
+    quarterlyRevenue = `$${lastRow.revenue.toLocaleString()}`;
+    quarterlyExpenses = `$${lastRow.expenses.toLocaleString()}`;
+    quarterlyNetIncome = `$${lastRow.netIncome.toLocaleString()}`;
+  }
 
   return (
     <div className="dashboard-container">
       <h2 className="dashboard-title">Welcome back, Analyst!</h2>
 
-      {/* ========== ROW 1: RISK & GOAL ========== */}
+      {/* ===== ROW 1: RISK & GOALS ===== */}
       <div className="top-row">
         {/* Risk Score Card */}
         <motion.div
@@ -145,18 +172,12 @@ export default function Dashboard() {
           transition={{ duration: 0.2 }}
         >
           <h3 className="section-title">Risk Score</h3>
-          <DottedCircularProgress
-            percentage={riskScore}
-            size={120}     
-            segments={20}  
-            dotRadius={4}  
-          />
-          <p className="risk-label">
-            Risk: {riskScore} / 100 ({riskLabel})
-          </p>
+          <DottedCircularProgress percentage={riskScore} />
+          {/* Show risk label instead of percentage */}
+          <p className="risk-label">Risk: {getRiskLabel(riskScore)}</p>
         </motion.div>
 
-        {/* Goal vs Current State */}
+        {/* Goals */}
         <motion.div
           className="goal-card"
           whileHover={{ scale: 1.03 }}
@@ -183,46 +204,55 @@ export default function Dashboard() {
         </motion.div>
       </div>
 
-      {/* ========== ROW 2: INFO CARDS ========== */}
+      {/* ===== ROW 2: INFO CARDS (Quarterly Revenue, Operating Expenses, Net Income) ===== */}
       <div className="cards-grid">
-        {cardsData.map((c, i) => (
-          <Card key={i} title={c.title} value={c.value} change={c.change} />
-        ))}
+        <Card
+          title="Quarterly Revenue"
+          value={quarterlyRevenue}
+          change={quarterlyChange}
+        />
+        <Card
+          title="Operating Expenses"
+          value={quarterlyExpenses}
+          change="↓ 2.1% from last quarter"
+        />
+        <Card
+          title="Net Profit"
+          value={quarterlyNetIncome}
+          change="↑ 3.4% from last quarter"
+        />
       </div>
 
-      {/* ========== ROW 3: CHARTS ========== */}
+      {/* ===== ROW 3: CHARTS (Profit & Loss, Stock Tracker) ===== */}
       <div className="charts-row">
-        {/* Profit & Loss */}
+        {/* Profit & Loss as a STACKED BAR CHART */}
         <motion.div
           className="chart"
           whileHover={{ scale: 1.03 }}
           transition={{ duration: 0.2 }}
         >
-          <h3 className="chart-title">Profit & Loss Overview</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart
-              data={profitLossData}
-              margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
-              <XAxis dataKey="name" stroke="#6B7280" />
-              <YAxis stroke="#6B7280" />
-              <Tooltip />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="revenue"
-                stroke="#10B981"
-                strokeWidth={2}
-              />
-              <Line
-                type="monotone"
-                dataKey="expenses"
-                stroke="#EF4444"
-                strokeWidth={2}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          <h3 className="chart-title">
+            Profit & Loss Overview (Quarterly)
+          </h3>
+          {loading ? (
+            <p>Loading CSV data...</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart
+                data={plData}
+                margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+                <XAxis dataKey="date" stroke="#6B7280" />
+                <YAxis stroke="#6B7280" />
+                <Tooltip />
+                <Legend />
+                {/* stackId="pnl" means they stack */}
+                <Bar dataKey="expenses" stackId="pnl" fill="#EF4444" />
+                <Bar dataKey="revenue" stackId="pnl" fill="#10B981" />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </motion.div>
 
         {/* Stock Tracker */}
@@ -242,13 +272,13 @@ export default function Dashboard() {
               <YAxis stroke="#6B7280" />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="stock" stroke="#3B82F6" strokeWidth={2} />
+              <Line type="linear" dataKey="stock" stroke="#3B82F6" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
         </motion.div>
       </div>
 
-      {/* ========== ROW 4: INVOICES ========== */}
+      {/* ===== ROW 4: INVOICES ===== */}
       <motion.div
         className="invoices-section"
         whileHover={{ scale: 1.03 }}

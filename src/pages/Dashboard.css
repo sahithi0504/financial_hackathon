@@ -45,10 +45,10 @@
 /* Dotted Circular Progress */
 .dotted-circular-progress {
   display: block;
-  margin: 0 auto; /* center the ring */
+  margin: 0 auto;
 }
 
-/* Risk Label below the ring */
+/* Risk Label */
 .risk-label {
   font-size: 1rem;
   font-weight: 500;
