@@ -1,9 +1,9 @@
-import Dashboard from './pages/Dashboard';
+import Home from './home.jsx';
 
 function App() {
   return (
-    <div>
-      <Dashboard />
+    <div className="app-container" style={{ display: 'flex' }}>
+      <Home />
     </div>
   );
 }
