@@ -13,7 +13,7 @@
   margin-bottom: 2rem;
 }
 
-/* TOP ROW: Risk & Goal side-by-side */
+/* Top Row: Risk & Goal side-by-side */
 .top-row {
   display: flex;
   gap: 20px;
@@ -21,13 +21,15 @@
   align-items: stretch;
 }
 
-.risk-card, .goal-card {
+/* Risk Card and Goal Card share similar styles */
+.risk-card,
+.goal-card {
   flex: 1;
   background-color: #f3f4f6;
   padding: 1.5rem;
   border-radius: 1rem;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -40,27 +42,18 @@
   text-align: center;
 }
 
-/* Risk Card Specifics */
+/* Dotted Circular Progress */
+.dotted-circular-progress {
+  display: block;
+  margin: 0 auto; /* center the ring */
+}
+
+/* Risk Label below the ring */
 .risk-label {
   font-size: 1rem;
   font-weight: 500;
   margin-top: 0.5rem;
   text-align: center;
-}
-
-/* Circular Progress */
-.circular-progress {
-  display: block;
-  margin: 0 auto;
-  transform: rotate(-90deg);
-}
-.circular-progress-bar {
-  transition: stroke-dashoffset 0.5s ease;
-}
-.circular-progress-text {
-  font-size: 0.9rem;
-  fill: #1f2937;
-  transform: rotate(90deg);
 }
 
 /* Goal Card List */
@@ -98,7 +91,7 @@
 
 .goal-fill {
   height: 100%;
-  background-color: #10B981;
+  background-color: #10b981;
 }
 
 .goal-percentage {
@@ -106,7 +99,7 @@
   color: #6b7280;
 }
 
-/* INFO CARDS (Row 2) */
+/* Info Cards (Row 2) */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -119,7 +112,7 @@
   padding: 1.5rem;
   border-radius: 1rem;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .card-title {
@@ -131,7 +124,7 @@
 .card-value {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #10B981;
+  color: #10b981;
   margin-bottom: 0.5rem;
 }
 
@@ -140,7 +133,7 @@
   color: gray;
 }
 
-/* CHARTS ROW (Row 3) */
+/* Charts Row (Row 3) */
 .charts-row {
   display: flex;
   gap: 20px;
@@ -153,7 +146,7 @@
   padding: 1.5rem;
   border-radius: 1rem;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .chart-title {
@@ -162,13 +155,13 @@
   color: #1f2937;
 }
 
-/* INVOICES SECTION (Row 4) */
+/* Invoices Section (Row 4) */
 .invoices-section {
   background-color: #f3f4f6;
   padding: 1.5rem;
   border-radius: 1rem;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .invoices-title {

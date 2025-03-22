@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion"; // <-- Import from framer-motion
+import { motion } from "framer-motion";
 import {
   LineChart,
   Line,
@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import "./Dashboard.css";
 
-// SAMPLE DATA
+// =================== SAMPLE DATA ===================
 const profitLossData = [
   { name: "Jan", revenue: 12000, expenses: 9000 },
   { name: "Feb", revenue: 15000, expenses: 11000 },
@@ -46,42 +46,62 @@ const goals = [
   { label: "Reduce Expenses", goal: 8000, current: 7000 },
 ];
 
-// CIRCULAR PROGRESS BAR
-function CircularProgress({ percentage, size }) {
-  const strokeWidth = 10;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference * (1 - percentage / 100);
+// =================== RISK HELPER (COLOR + LABEL) ===================
+function getRiskData(percentage) {
+  // Default to Low
+  let label = "Low";
+  let color = "#10B981"; // Green
+
+  if (percentage >= 80) {
+    label = "High";
+    color = "#EF4444"; // Red
+  } else if (percentage >= 40) {
+    label = "Medium";
+    color = "#F59E0B"; // Yellow
+  }
+
+  return { label, color };
+}
+
+// =================== DOTTED CIRCULAR PROGRESS ===================
+function DottedCircularProgress({
+  percentage = 75,
+  size = 100,
+  segments = 20,    // Number of dots
+  dotRadius = 4,    // Size of each dot
+}) {
+  // how many dots are "active"?
+  const activeCount = Math.round((percentage / 100) * segments);
+
+  // figure out color + label automatically
+  const { label: riskLabel, color: activeColor } = getRiskData(percentage);
+
+  // place the ring
+  const ringRadius = size / 2 - dotRadius - 2;
+  const center = size / 2;
+  const inactiveColor = "#e5e7eb";
+
+  // build array of dot indices
+  const dots = Array.from({ length: segments }, (_, i) => i);
 
   return (
-    <svg width={size} height={size} className="circular-progress">
-      <circle
-        className="circular-progress-bg"
-        stroke="#e5e7eb"
-        strokeWidth={strokeWidth}
-        fill="transparent"
-        r={radius}
-        cx={size / 2}
-        cy={size / 2}
-      />
-      <circle
-        className="circular-progress-bar"
-        stroke="#EF4444"
-        strokeWidth={strokeWidth}
-        fill="transparent"
-        r={radius}
-        cx={size / 2}
-        cy={size / 2}
-        strokeDasharray={circumference}
-        strokeDashoffset={offset}
-        strokeLinecap="round"
-      />
+    <svg width={size} height={size} className="dotted-circular-progress">
+      {dots.map((i) => {
+        const angle = (2 * Math.PI * i) / segments;
+        const x = center + ringRadius * Math.cos(angle);
+        const y = center + ringRadius * Math.sin(angle);
+        const fillColor = i < activeCount ? activeColor : inactiveColor;
+        return <circle key={i} cx={x} cy={y} r={dotRadius} fill={fillColor} />;
+      })}
+      {/* Centered text (percentage) */}
       <text
         x="50%"
         y="50%"
         textAnchor="middle"
         dy=".3em"
-        className="circular-progress-text"
+        fontSize="16"
+        fill="#1f2937"
+        fontWeight="500"
       >
         {percentage}%
       </text>
@@ -89,8 +109,7 @@ function CircularProgress({ percentage, size }) {
   );
 }
 
-// REUSABLE CARD COMPONENT
-// Now using motion.div with a hover scale effect
+// =================== REUSABLE CARD COMPONENT ===================
 function Card({ title, value, change }) {
   return (
     <motion.div
@@ -105,10 +124,13 @@ function Card({ title, value, change }) {
   );
 }
 
+// =================== MAIN DASHBOARD ===================
 export default function Dashboard() {
-  // Example risk score (75 out of 100)
-  const riskScore = 75;
-  const riskLevel = "High";
+  // riskScore is a percentage from 0 to 100
+  const riskScore = 100; // Try changing to 20, 50, 90, etc.
+
+  // We automatically determine risk color & label from the percentage
+  const { label: riskLabel } = getRiskData(riskScore);
 
   return (
     <div className="dashboard-container">
@@ -123,9 +145,14 @@ export default function Dashboard() {
           transition={{ duration: 0.2 }}
         >
           <h3 className="section-title">Risk Score</h3>
-          <CircularProgress percentage={riskScore} size={120} />
+          <DottedCircularProgress
+            percentage={riskScore}
+            size={120}     
+            segments={20}  
+            dotRadius={4}  
+          />
           <p className="risk-label">
-            Risk: {riskScore} / 100 ({riskLevel})
+            Risk: {riskScore} / 100 ({riskLabel})
           </p>
         </motion.div>
 
