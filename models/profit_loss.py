@@ -67,6 +67,7 @@ def forecast_and_plot(series, label, color):
     plt.tight_layout()
     plt.savefig(f'{label.replace(" ", "_")}_Forecast.png')
     plt.show()
+    plt.savefig('Stock_Trend.png')
     plt.close('all')
 
 metrics = {
