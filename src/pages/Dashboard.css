@@ -1,70 +1,224 @@
-/* Dashboard.css */
-
-/* Overall container with a white background and black text */
+/* Overall Container */
 .dashboard-container {
-    padding: 20px;
-    background-color: white;
-    min-height: 100vh;
-    color: black;
-    font-family: sans-serif;
-  }
-  
-  /* Title style */
-  .dashboard-title {
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-  
-  /* Responsive grid for cards */
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-  }
-  
-  /* Card style */
-  .card {
-    background-color: #f0f0f0;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
-  /* Card title */
-  .card-title {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-  }
-  
-  /* Card value */
-  .card-value {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #10B981;
-    margin-bottom: 5px;
-  }
-  
-  /* Card change info */
-  .card-change {
-    font-size: 1rem;
-    color: gray;
-  }
+  padding: 2rem;
+  background-color: #ffffff;
+  min-height: 100vh;
+  font-family: sans-serif;
+  color: #1f2937;
+}
 
-/* Charts Section */
-.charts-section {
-    margin-top: 40px;
-  }
-  
-  /* Chart container style */
-  .chart {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-  }
-  
-  /* Chart title */
-  .chart-title {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
-  
+/* Title */
+.dashboard-title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* TOP ROW: Risk & Goal side-by-side */
+.top-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 2rem;
+  align-items: stretch;
+}
+
+.risk-card, .goal-card {
+  flex: 1;
+  background-color: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #1f2937;
+  text-align: center;
+}
+
+/* Risk Card Specifics */
+.risk-label {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Circular Progress */
+.circular-progress {
+  display: block;
+  margin: 0 auto;
+  transform: rotate(-90deg);
+}
+.circular-progress-bar {
+  transition: stroke-dashoffset 0.5s ease;
+}
+.circular-progress-text {
+  font-size: 0.9rem;
+  fill: #1f2937;
+  transform: rotate(90deg);
+}
+
+/* Goal Card List */
+.goal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.goal-item {
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.goal-label {
+  font-weight: 600;
+  display: block;
+}
+
+.goal-values {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.goal-progress {
+  width: 100%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.25rem;
+}
+
+.goal-fill {
+  height: 100%;
+  background-color: #10B981;
+}
+
+.goal-percentage {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+/* INFO CARDS (Row 2) */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 2rem;
+}
+
+.card {
+  background-color: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.card-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #10B981;
+  margin-bottom: 0.5rem;
+}
+
+.card-change {
+  font-size: 1rem;
+  color: gray;
+}
+
+/* CHARTS ROW (Row 3) */
+.charts-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 2rem;
+}
+
+.chart {
+  flex: 1;
+  background-color: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.chart-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+/* INVOICES SECTION (Row 4) */
+.invoices-section {
+  background-color: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.invoices-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.invoices-table {
+  width: 100%;
+  font-size: 0.95rem;
+  border-collapse: collapse;
+}
+
+.invoices-table-header {
+  border-bottom: 1px solid #d1d5db;
+  color: #6b7280;
+  text-align: left;
+}
+
+.invoices-table-header th {
+  padding: 0.5rem 0;
+}
+
+.invoices-table-row {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.invoices-table-row td {
+  padding: 0.75rem 0;
+}
+
+/* Invoice Status Labels */
+.invoice-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+}
+
+.invoice-status.paid {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.invoice-status.unpaid {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.invoice-status.overdue {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
