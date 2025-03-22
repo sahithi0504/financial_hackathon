@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard'; 
 import GoalTracker from './pages/GoalTracker';
+import UploadData from './pages/UploadData';
 import './index.css';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/goals-tracker" element={<GoalTracker />} />
+            <Route path="/upload-data" element={<UploadData />} />
             {/* Additional routes can be added later */}
           </Routes>
         </div>
