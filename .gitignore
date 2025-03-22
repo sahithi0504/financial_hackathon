@@ -13,6 +13,8 @@ dist-ssr
 *.local
 
 models/venv
+.venv-py311
+.venv
 
 # Editor directories and files
 .vscode/*
@@ -24,3 +26,4 @@ models/venv
 *.njsproj
 *.sln
 *.sw?
+
