@@ -22,7 +22,18 @@
 }
 
 /* Risk Card and Goal Card share similar styles */
-.risk-card,
+.risk-card{
+  flex: 1;
+  background-color: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .goal-card {
   flex: 1;
   background-color: #f3f4f6;
