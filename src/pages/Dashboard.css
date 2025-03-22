@@ -1,0 +1,51 @@
+/* Dashboard.css */
+
+/* Overall container with a white background and black text */
+.dashboard-container {
+    padding: 20px;
+    background-color: white;
+    min-height: 100vh;
+    color: black;
+    font-family: sans-serif;
+  }
+  
+  /* Title style */
+  .dashboard-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  /* Responsive grid for cards */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Card style */
+  .card {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  /* Card title */
+  .card-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Card value */
+  .card-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #10B981;
+    margin-bottom: 5px;
+  }
+  
+  /* Card change info */
+  .card-change {
+    font-size: 1rem;
+    color: gray;
+  }
+  
