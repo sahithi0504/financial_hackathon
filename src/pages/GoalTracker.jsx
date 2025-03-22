@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   FaPlus,
   FaTrash,
@@ -43,7 +45,7 @@ const GoalTracker = () => {
     title: "",
     target: "",
     actual: "",
-    timeframe: "",
+    timeframe: new Date(), // Initialize with current date
   });
 
   const iconOptions = {
@@ -55,7 +57,7 @@ const GoalTracker = () => {
   const openModal = () => setShowModal(true);
   const closeModal = () => {
     setShowModal(false);
-    setNewGoal({ icon: "revenue", title: "", target: "", actual: "", timeframe: "" });
+    setNewGoal({ icon: "revenue", title: "", target: "", actual: "", timeframe: new Date() });
   };
 
   const handleChange = (e) => {
@@ -63,10 +65,30 @@ const GoalTracker = () => {
     setNewGoal((prev) => ({ ...prev, [name]: value }));
   };
 
+  // New handler for date selection
+  const handleDateChange = (date) => {
+    setNewGoal((prev) => ({ ...prev, timeframe: date }));
+  };
+
   const addGoal = () => {
     const id = Date.now();
     const icon = iconOptions[newGoal.icon] || <FaMoneyBill />;
-    setGoals([...goals, { ...newGoal, id, icon, target: +newGoal.target, actual: +newGoal.actual }]);
+    // Convert the date object to a locale string for display
+    const formattedDate =
+      newGoal.timeframe instanceof Date
+        ? newGoal.timeframe.toLocaleDateString()
+        : newGoal.timeframe;
+    setGoals([
+      ...goals,
+      {
+        ...newGoal,
+        id,
+        icon,
+        target: +newGoal.target,
+        actual: +newGoal.actual,
+        timeframe: formattedDate,
+      },
+    ]);
     closeModal();
   };
 
@@ -117,8 +139,12 @@ const GoalTracker = () => {
               <p className="goal-percentage">{pct}% achieved</p>
               <p className="goal-timeframe">Timeframe: {goal.timeframe}</p>
               <div className="goal-actions">
-                <button className="edit-btn"><FaEdit /></button>
-                <button className="delete-btn" onClick={() => deleteGoal(goal.id)}><FaTrash /></button>
+                <button className="edit-btn">
+                  <FaEdit />
+                </button>
+                <button className="delete-btn" onClick={() => deleteGoal(goal.id)}>
+                  <FaTrash />
+                </button>
               </div>
             </div>
           );
@@ -139,23 +165,46 @@ const GoalTracker = () => {
             </div>
             <div className="form-group">
               <label>Goal Title</label>
-              <input type="text" name="title" value={newGoal.title} onChange={handleChange} />
+              <input
+                type="text"
+                name="title"
+                value={newGoal.title}
+                onChange={handleChange}
+              />
             </div>
             <div className="form-group">
               <label>Target Amount</label>
-              <input type="number" name="target" value={newGoal.target} onChange={handleChange} />
+              <input
+                type="number"
+                name="target"
+                value={newGoal.target}
+                onChange={handleChange}
+              />
             </div>
             <div className="form-group">
               <label>Current Actual</label>
-              <input type="number" name="actual" value={newGoal.actual} onChange={handleChange} />
+              <input
+                type="number"
+                name="actual"
+                value={newGoal.actual}
+                onChange={handleChange}
+              />
             </div>
             <div className="form-group">
               <label>Timeframe</label>
-              <input type="text" name="timeframe" value={newGoal.timeframe} onChange={handleChange} />
+              <DatePicker
+                selected={newGoal.timeframe}
+                onChange={handleDateChange}
+                dateFormat="MMMM d, yyyy"
+              />
             </div>
             <div className="modal-actions">
-              <button className="save-btn" onClick={addGoal}>Save</button>
-              <button className="cancel-btn" onClick={closeModal}>Cancel</button>
+              <button className="save-btn" onClick={addGoal}>
+                Save
+              </button>
+              <button className="cancel-btn" onClick={closeModal}>
+                Cancel
+              </button>
             </div>
           </div>
         </div>

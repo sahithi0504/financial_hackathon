@@ -11,8 +11,8 @@
 }
 
 .add-btn {
-  background-color: #2563eb;
-  color: white;
+  background-color: #d8f7da;
+  color: rgb(0, 0, 0);
   padding: 0.6rem 1rem;
   font-size: 0.9rem;
   border: none;
@@ -46,7 +46,7 @@
 
 .goal-icon {
   font-size: 1.4rem;
-  color: #3b82f6;
+  color: #53c75f;
 }
 
 .goal-meta {
@@ -86,7 +86,16 @@
   gap: 10px;
 }
 
-.edit-btn, .delete-btn {
+.edit-btn{
+  color:#000000;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+ .delete-btn {
+  color:#ef4444;
   background: none;
   border: none;
   cursor: pointer;
@@ -124,6 +133,7 @@
 
 .modal h3 {
   margin-top: 0;
+  margin-bottom: 1.5rem;
 }
 
 .form-group {
