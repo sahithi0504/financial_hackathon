@@ -12,7 +12,7 @@ function Sidebar({ isCollapsed, onToggle }) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const navItems = [
-    { title: 'Dashboard', icon: <FaHome />, link: '/' },
+    { title: 'Dashboard', icon: <FaHome />, link: '/dashboard'},
     { title: 'Model Insights', icon: <FaChartLine />, link: '/model-insights' },
     { title: 'Goals Tracker', icon: <FaBullseye />, link: '/goals-tracker' },
     { title: 'Upload Data', icon: <FaUpload />, link: '/upload-data' },

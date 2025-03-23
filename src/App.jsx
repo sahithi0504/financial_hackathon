@@ -1,6 +1,5 @@
-// src/App.jsx
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard'; 
 import ModelInsights from './pages/ModelInsights'; 
@@ -8,11 +7,12 @@ import GoalTracker from './pages/GoalTracker';
 import UploadData from './pages/UploadData';
 import Settings from './pages/Settings';
 import Notification from './pages/Notification';
-import Home from './home'; // your Home screen
-
+import Home from './home';
+import ProtectedRoute from './ProtectedRoute';
 import './index.css';
 
-function AppLayout() {
+// Layout used for authenticated routes
+function AppLayout({ children }) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const handleSidebarToggle = () => {
@@ -41,7 +41,47 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/*" element={<AppLayout />} />
+
+        {/* Protected Routes wrapped in AppLayout */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Dashboard />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/goals-tracker" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <GoalTracker />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/notification" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Notification />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/upload-data" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <UploadData />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/settings" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Settings />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
       </Routes>
     </Router>
   );

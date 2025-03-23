@@ -25,7 +25,7 @@ const Home = () => {
         </div>
       </nav>
 
-      <section className="hero-section 2col">
+      <section className="hero-section two-col">
         <div className="left">
           <h1>Analyzing and Early Identifying Financial Risks In Companies</h1>
           <p>As a financial advisor, you have access to an invoice analyzer,<br /> stock insights like trends and predictions, and profit/loss margins</p>
