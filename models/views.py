@@ -5,6 +5,7 @@ from invoice_model import (
     get_risky_customers_data
 )
 import matplotlib.pyplot as plt
+from stock_price import StockForecaster
 
 
 def revenue_forecast():
@@ -38,5 +39,18 @@ def top_risky_bar_chart():
 def risky_customers_json():
     data = get_risky_customers_data()
     return data
+
+def stock_trend_graph():
+    forecaster = StockForecaster()
+    fig = forecaster.plot_predictions()
+    return fig
+
+def stock_trend_signal_text():
+    forecaster = StockForecaster()
+    signal = forecaster.generate_trend_signal()
+    return signal
+
+
+
 
 
