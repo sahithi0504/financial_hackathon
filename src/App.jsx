@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard'; 
+import ModelInsights from './pages/ModelInsights'; 
 import GoalTracker from './pages/GoalTracker';
 import UploadData from './pages/UploadData';
 import Settings from './pages/Settings';
@@ -24,6 +25,7 @@ function AppLayout() {
       <div className="main-content">
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/model-insights" element={<ModelInsights />} />
           <Route path="/goals-tracker" element={<GoalTracker />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/upload-data" element={<UploadData />} />
