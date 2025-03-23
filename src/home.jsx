@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Login from "./login";
 import Signup from "./signup";
 import Logo from "/FF_logo.webp";
@@ -6,6 +7,13 @@ import Logo from "/FF_logo.webp";
 const Home = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const navigate = useNavigate();
+
+  const handleAuthSuccess = () => {
+    setShowLogin(false);
+    setShowSignup(false);
+    navigate("/dashboard");
+  };
 
   return (
     <div className="home-wrapper">
@@ -30,8 +38,8 @@ const Home = () => {
         </div>
       </section>
 
-      <Login isOpen={showLogin} onClose={() => setShowLogin(false)} />
-      <Signup isOpen={showSignup} onClose={() => setShowSignup(false)} />
+      <Login isOpen={showLogin} onClose={() => setShowLogin(false)} onSuccess={handleAuthSuccess} />
+      <Signup isOpen={showSignup} onClose={() => setShowSignup(false)} onSuccess={handleAuthSuccess} />
           </div>
   );
 };

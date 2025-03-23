@@ -1,15 +1,17 @@
 // src/App.jsx
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard'; 
 import GoalTracker from './pages/GoalTracker';
 import UploadData from './pages/UploadData';
 import Settings from './pages/Settings';
-import './index.css';
 import Notification from './pages/Notification';
-function App() {
-  // Lift the collapsed state up here
+import Home from './home'; // your Home screen
+
+import './index.css';
+
+function AppLayout() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const handleSidebarToggle = () => {
@@ -17,21 +19,28 @@ function App() {
   };
 
   return (
-    <Router>
-      <div className={`app-container ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
-        {/* Pass isCollapsed state and toggle handler to Sidebar */}
-        <Sidebar isCollapsed={isSidebarCollapsed} onToggle={handleSidebarToggle} />
-        <div className="main-content">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/goals-tracker" element={<GoalTracker />} />
-            <Route path="/notification" element={<Notification />} />
-            <Route path="/upload-data" element={<UploadData/>} />
-            <Route path="/settings" element={<Settings/>} />
-            {/* Additional routes can be added later */}
-          </Routes>
-        </div>
+    <div className={`app-container ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+      <Sidebar isCollapsed={isSidebarCollapsed} onToggle={handleSidebarToggle} />
+      <div className="main-content">
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/goals-tracker" element={<GoalTracker />} />
+          <Route path="/notification" element={<Notification />} />
+          <Route path="/upload-data" element={<UploadData />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
       </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/*" element={<AppLayout />} />
+      </Routes>
     </Router>
   );
 }

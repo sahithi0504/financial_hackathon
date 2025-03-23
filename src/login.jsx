@@ -5,7 +5,7 @@ import "./design.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { sendPasswordResetEmail } from "firebase/auth";
 
-const Login = ({ isOpen, onClose }) => {
+const Login = ({ isOpen, onClose, onSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +17,7 @@ const Login = ({ isOpen, onClose }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       onClose();
+      onSuccess?.();
     } catch (error) {
       alert(error.message);
     }
@@ -26,6 +27,7 @@ const Login = ({ isOpen, onClose }) => {
     try {
       await signInWithPopup(auth, googleProvider);
       onClose();
+      onSuccess?.();
     } catch (error) {
       alert(error.message);
     }

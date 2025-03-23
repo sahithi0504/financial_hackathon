@@ -4,7 +4,7 @@ import { auth, googleProvider } from "./firebase";
 import './design.css';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const Signup = ({ isOpen, onClose }) => {
+const Signup = ({ isOpen, onClose, onSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -23,6 +23,7 @@ const Signup = ({ isOpen, onClose }) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       onClose();
+      onSuccess?.(); 
     } catch (error) {
       alert(error.message);
     }
@@ -32,6 +33,7 @@ const Signup = ({ isOpen, onClose }) => {
     try {
       await signInWithPopup(auth, googleProvider);
       onClose();
+      onSuccess?.();
     } catch (error) {
       alert(error.message);
     }
