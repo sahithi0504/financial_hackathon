@@ -26,6 +26,8 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/goals-tracker" element={<GoalTracker />} />
             <Route path="/notification" element={<Notification />} />
+            <Route path="/upload-data" element={<UploadData/>} />
+            <Route path="/settings" element={<Settings/>} />
             {/* Additional routes can be added later */}
           </Routes>
         </div>
