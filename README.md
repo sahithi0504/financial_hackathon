@@ -1,18 +1,43 @@
-<<<<<<< HEAD
+Early Detection and Analysis of Financial Risks for Companies
 
-# React + Vite
+Overview:
+This project was developed during a Hackathon with the theme of financial awareness. We focused on providing financial advisors at companies with a smart dashboard that analyzes important financial data and offers insights so the financial advisors can track their goals. 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Data three separate models were trained on:
+  - Invoices
+  - Stocks
+  - Profit/Loss
 
-Currently, two official plugins are available:
+Tech Stack:
+  - Backend:
+      - Python
+      - Custom machine learning models for each data source
+      - FastAPI for backend-frontend connection
+      - FireBase for user authentication (login/signup via modals)
+  - Frontend:
+      - React + vite
+      - JavaScript
+      - Data visualizations using the below npm installations
+  
+Installations:
+  - It is recommended to have Python 3.11 or prior
+  - Clone the repository and install the below packages:
+      - npm install recharts
+      - npm install motion
+      - npm install react-router-dom
+      - npm install react-icons --save
+      - npm install papaparse
+      - npm install react-datepicker --save
+      - npm run dev
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  Future Implementations:
+    - Sentiment Analysis
+    - Database Management 
+    - Real-Time Predictions
 
-## Expanding the ESLint configuration
+Images of the development:
 
-# If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-
-# financial_hackathon
-
-> > > > > > > fa3bd8ed46c181bffe45d91622d8bcfdf6f94545
+![upload_data](https://github.com/user-attachments/assets/fb842e72-af5d-4d69-b36f-d22674040206)
+![settings](https://github.com/user-attachments/assets/31420318-ea3b-46e0-93c7-b75cb98aadc7)
+![notifications](https://github.com/user-attachments/assets/3c0df1d8-808b-454b-968d-48e1f6c7d822)
+![loginScreen](https://github.com/user-attachments/assets/ea6c7e00-c1fe-45d4-a006-e7d1cb0045d2)
