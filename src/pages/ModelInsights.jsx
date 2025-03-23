@@ -62,8 +62,7 @@ function ModelInsights() {
           </div>
           <div className="card-footer">
             <p className="semantic-analysis">
-              The distribution of risk categories remains consistent with prior periods, 
-              suggesting stable risk management strategies.
+            Analyzes invoice data and classifies users into high-risk and low-risk categories
             </p>
           </div>
         </div>
@@ -82,8 +81,7 @@ function ModelInsights() {
           </div>
           <div className="card-footer">
             <p className="semantic-analysis">
-              Company maintains a strong liquidity position with a stable capital structure, 
-              forecasting minor fluctuations in the short term.
+            The graph predicts the financial standing for the next two quarters based on trends in Gross Profit, Operating Expenses, and Net Income.
             </p>
           </div>
         </div>
@@ -112,8 +110,7 @@ function ModelInsights() {
           </div>
           <div className="card-footer">
             <p className="semantic-analysis">
-              The above table highlights high-risk customers who may require additional 
-              scrutiny or follow-up to mitigate potential losses.
+             The table displays the top 10 % of customers with high risk invoice patterns.
             </p>
           </div>
         </div>
@@ -132,8 +129,7 @@ function ModelInsights() {
           </div>
           <div className="card-footer">
             <p className="semantic-analysis">
-              Projected gross profits are expected to rise by 5% over the next quarter, 
-              aligning with stable demand and efficient cost management.
+            Forecasts gross profit for the next two quarters based on historical trends, highlighting a projected dip followed by a recovery.
             </p>
           </div>
         </div>

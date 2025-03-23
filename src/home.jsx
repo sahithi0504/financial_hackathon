@@ -27,8 +27,8 @@ const Home = () => {
 
       <section className="hero-section two-col">
         <div className="left">
-          <h1>Early Detection and Analysis of Financial Risks in Companies</h1>
-          <p>As a financial advisor, you have access to an invoice analyzer,<br /> stock insights like trends and predictions, and profit/loss margins</p>
+          <h1>Early Detection and Analysis of Financial Risks for Companies</h1>
+          <p>As a financial advisor, you have access to an invoice analyzer,<br /> stock insights such as trends and predictions, and profit/loss margins</p>
           <div className="hero-actions">
             <button onClick={() => setShowSignup(true)} className="primary-btn">Get Started Now</button>
           </div>
