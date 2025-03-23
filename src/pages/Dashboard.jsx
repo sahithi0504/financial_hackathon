@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Papa from "papaparse";
 import {
-  BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, Legend
 } from "recharts";
 import "./Dashboard.css";
@@ -40,7 +40,15 @@ function DottedCircularProgress({ percentage = 85, size = 100, segments = 20, do
         const fill = i < activeCount ? activeColor : inactiveColor;
         return <circle key={i} cx={x} cy={y} r={dotRadius} fill={fill} />;
       })}
-      <text x="50%" y="50%" textAnchor="middle" dy=".3em" fontSize="16" fill="#1f2937" fontWeight="500">
+      <text
+        x="50%"
+        y="50%"
+        textAnchor="middle"
+        dy=".3em"
+        fontSize="16"
+        fill="#1f2937"
+        fontWeight="500"
+      >
         {percentage}%
       </text>
     </svg>
@@ -59,13 +67,13 @@ function Card({ title, value, change }) {
 
 export default function Dashboard() {
   const [plData, setPlData] = useState([]);
-  const [stockData, setStockData] = useState([]);
   const [invoiceData, setInvoiceData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const riskScore = 19;
 
   useEffect(() => {
+    // Fetch Quarterly P&L data
     fetch("/quarterly_data.csv")
       .then(res => res.text())
       .then(csv => {
@@ -79,17 +87,7 @@ export default function Dashboard() {
         setPlData(data);
       });
 
-    fetch("/costco_stock_data.csv")
-      .then(res => res.text())
-      .then(csv => {
-        const parsed = Papa.parse(csv, { header: true });
-        const rows = parsed.data.slice(-7).map(row => ({
-          name: row["Date"],
-          stock: parseFloat(row["Close"]) || 0
-        }));
-        setStockData(rows);
-      });
-
+    // Fetch Invoice Data
     fetch("/aggregated_invoice_data.csv")
       .then(res => res.text())
       .then(csv => {
@@ -141,17 +139,33 @@ export default function Dashboard() {
         </motion.div>
       </div>
 
+      {/* Cards for P&L / Net Income / Expenses */}
       <div className="cards-grid">
-        <Card title="Quarterly Revenue" value={quarterlyRevenue} change="↑ 5.2% from last quarter" />
-        <Card title="Operating Expenses" value={quarterlyExpenses} change="↓ 2.1% from last quarter" />
-        <Card title="Net Profit" value={quarterlyNetIncome} change="↑ 3.4% from last quarter" />
+        <Card
+          title="Quarterly Revenue"
+          value={quarterlyRevenue}
+          change="↑ 5.2% from last quarter"
+        />
+        <Card
+          title="Operating Expenses"
+          value={quarterlyExpenses}
+          change="↓ 2.1% from last quarter"
+        />
+        <Card
+          title="Net Profit"
+          value={quarterlyNetIncome}
+          change="↑ 3.4% from last quarter"
+        />
       </div>
 
+      {/* Single Chart Row: Profit & Loss Overview (No Stock Tracker) */}
       <div className="charts-row">
-        <motion.div className="chart" whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}>
+        <motion.div className="chart wide-chart" whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}>
           <h3 className="chart-title">Profit & Loss Overview (Quarterly)</h3>
-          {loading ? <p>Loading...</p> : (
-            <ResponsiveContainer width="100%" height={300}>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={400}>
               <BarChart data={plData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" stroke="#6B7280" />
@@ -163,20 +177,6 @@ export default function Dashboard() {
               </BarChart>
             </ResponsiveContainer>
           )}
-        </motion.div>
-
-        <motion.div className="chart" whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}>
-          <h3 className="chart-title">Stock Tracker</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={stockData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" stroke="#6B7280" />
-              <YAxis stroke="#6B7280" />
-              <Tooltip />
-              <Legend />
-              <Line type="linear" dataKey="stock" stroke="#3B82F6" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
         </motion.div>
       </div>
 

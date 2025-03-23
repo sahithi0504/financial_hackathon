@@ -1,257 +1,114 @@
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import {
-  FaPlus,
-  FaTrash,
-  FaEdit,
-  FaMoneyBill,
-  FaChartLine,
-  FaFileInvoiceDollar,
-} from "react-icons/fa";
+import React from "react";
 import "./GoalTracker.css";
 
 const GoalTracker = () => {
-  const [goals, setGoals] = useState([
-    {
-      id: 1,
-      icon: <FaMoneyBill />,
-      title: "Maintain monthly revenue > $10K",
-      target: 10000,
-      actual: 9300,
-      timeframe: "March 2025",
-    },
-    {
-      id: 2,
-      icon: <FaFileInvoiceDollar />,
-      title: "Analyze invoices for unpaid bills",
-      target: 100,
-      actual: 85,
-      timeframe: "March 2025",
-    },
-    {
-      id: 3,
-      icon: <FaChartLine />,
-      title: "Track profit margin improvements",
-      target: 5000,
-      actual: 6000,
-      timeframe: "Q1 2025",
-    },
-  ]);
-
-  const [showModal, setShowModal] = useState(false);
-  const [newGoal, setNewGoal] = useState({
-    icon: "revenue",
-    title: "",
-    target: "",
-    actual: "",
-    timeframe: new Date(),
-  });
-
-  const iconOptions = {
-    revenue: <FaMoneyBill />,
-    invoices: <FaFileInvoiceDollar />,
-    profit: <FaChartLine />,
-  };
-
-  const openModal = () => setShowModal(true);
-  const closeModal = () => {
-    setShowModal(false);
-    setNewGoal({
-      icon: "revenue",
-      title: "",
-      target: "",
-      actual: "",
-      timeframe: new Date(),
-    });
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewGoal((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleDateChange = (date) => {
-    setNewGoal((prev) => ({ ...prev, timeframe: date }));
-  };
-
-  const addGoal = () => {
-    const id = Date.now();
-    const icon = iconOptions[newGoal.icon] || <FaMoneyBill />;
-    const formattedDate =
-      newGoal.timeframe instanceof Date
-        ? newGoal.timeframe.toLocaleDateString()
-        : newGoal.timeframe;
-    setGoals([
-      ...goals,
-      {
-        ...newGoal,
-        id,
-        icon,
-        target: +newGoal.target,
-        actual: +newGoal.actual,
-        timeframe: formattedDate,
-      },
-    ]);
-    closeModal();
-  };
-
-  const deleteGoal = (id) => {
-    setGoals(goals.filter((goal) => goal.id !== id));
-  };
-
-  const calculateProgress = (goal) => {
-    const pct = Math.min((goal.actual / goal.target) * 100, 100);
-    return Math.floor(pct);
-  };
-
-  const getProgressColor = (pct) => {
-    if (pct < 40) return "red";
-    if (pct < 70) return "orange";
-    return "green";
-  };
-
   return (
     <div className="goal-tracker">
-      <div className="header">
-        <h2>Goal Tracker</h2>
-        <button className="add-btn" onClick={openModal}>
-          <FaPlus /> Add Goal
-        </button>
-      </div>
+      <div className="graphs-section">
+        <h2>Financial Graphs</h2>
 
-      <div className="goal-grid">
-        {goals.map((goal) => {
-          const pct = calculateProgress(goal);
-          return (
-            <div className="goal-card" key={goal.id}>
-              <div className="goal-header">
-                <span className="goal-icon">{goal.icon}</span>
-                <h4>{goal.title}</h4>
-              </div>
-              <p className="goal-meta">Target: ${goal.target}</p>
-              <p className="goal-meta">Actual: ${goal.actual}</p>
-              <div className="progress-bar">
+        {/* Card 1: Monthly Invoices < $30k */}
+        <div className="graph-card">
+          <div className="card-header">
+            <h3>Goal: Monthly Invoices &lt; $30k</h3>
+          </div>
+          <div className="card-body">
+            <img
+              src="http://localhost:8000/top_risky_bar_chart"
+              alt="Top Risky Bar Chart"
+            />
+          </div>
+          <div className="card-footer">
+            <p className="footer-warning">Risky Invoice not being met the targeted goal</p>
+            <div className="footer-extra">
+              <div className="footer-timeframe">Timeframe: March 2025</div>
+              <div className="footer-progress-bar">
                 <div
-                  className="progress-fill"
-                  style={{
-                    width: `${pct}%`,
-                    backgroundColor: getProgressColor(pct),
-                  }}
+                  className="footer-progress-fill"
+                  style={{ width: "70%", backgroundColor: "green" }}
                 ></div>
               </div>
-              <p className="goal-percentage">{pct}% achieved</p>
-              <p className="goal-timeframe">Timeframe: {goal.timeframe}</p>
-              <div className="goal-actions">
-                <button className="edit-btn">
-                  <FaEdit />
-                </button>
-                <button className="delete-btn" onClick={() => deleteGoal(goal.id)}>
-                  <FaTrash />
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>New Goal</h3>
-            <div className="form-group">
-              <label>Icon Type</label>
-              <select name="icon" value={newGoal.icon} onChange={handleChange}>
-                <option value="revenue">Revenue</option>
-                <option value="invoices">Invoices</option>
-                <option value="profit">Profit</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Goal Title</label>
-              <input
-                type="text"
-                name="title"
-                value={newGoal.title}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>Target Amount</label>
-              <input
-                type="number"
-                name="target"
-                value={newGoal.target}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>Current Actual</label>
-              <input
-                type="number"
-                name="actual"
-                value={newGoal.actual}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>Timeframe</label>
-              <DatePicker
-                selected={newGoal.timeframe}
-                onChange={handleDateChange}
-                dateFormat="MMMM d, yyyy"
-              />
-            </div>
-            <div className="modal-actions">
-              <button className="save-btn" onClick={addGoal}>
-                Save
-              </button>
-              <button className="cancel-btn" onClick={closeModal}>
-                Cancel
-              </button>
+              <p className="footer-progress-percentage">70% achieved</p>
             </div>
           </div>
         </div>
-      )}
 
-      {/* Graphs Section for GoalTracker */}
-      <div className="graphs-section">
-        <h2>Financial Graphs</h2>
-        <div className="graph">
-          <h3>Top Risky Bar Chart</h3>
-          <img
-            src="http://localhost:8000/top_risky_bar_chart"
-            alt="Top Risky Bar Chart"
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
-          <p>Goal: Monthly Invoices &lt; $30k</p>
+        {/* Card 2: Net Income Forecast */}
+        <div className="graph-card">
+          <div className="card-header">
+            <h3>Goal: Net Income Forecast</h3>
+          </div>
+          <div className="card-body">
+            <img
+              src="http://localhost:8000/net_income_forecast"
+              alt="Net Income Forecast"
+            />
+          </div>
+          <div className="card-footer">
+            <p className="footer-warning">Net income is behind target</p>
+            <div className="footer-extra">
+              <div className="footer-timeframe">Timeframe: Q1 2025</div>
+              <div className="footer-progress-bar">
+                <div
+                  className="footer-progress-fill"
+                  style={{ width: "80%", backgroundColor: "green" }}
+                ></div>
+              </div>
+              <p className="footer-progress-percentage">80% achieved</p>
+            </div>
+          </div>
         </div>
-        <div className="graph">
-          <h3>Net Income Forecast</h3>
-          <img
-            src="http://localhost:8000/net_income_forecast"
-            alt="Net Income Forecast"
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
-          <p>Goal: Increase Net Income to <strong>$220k</strong></p>
+
+        {/* Card 3: Operating Expenses Forecast */}
+        <div className="graph-card">
+          <div className="card-header">
+            <h3>Goal: Operating Expenses Forecast</h3>
+          </div>
+          <div className="card-body">
+            <img
+              src="http://localhost:8000/operating_expenses_forecast"
+              alt="Operating Expenses Forecast"
+            />
+          </div>
+          <div className="card-footer">
+            <p className="footer-warning">Expenses still high vs. target</p>
+            <div className="footer-extra">
+              <div className="footer-timeframe">Timeframe: Q2 2025</div>
+              <div className="footer-progress-bar">
+                <div
+                  className="footer-progress-fill"
+                  style={{ width: "65%", backgroundColor: "green" }}
+                ></div>
+              </div>
+              <p className="footer-progress-percentage">65% achieved</p>
+            </div>
+          </div>
         </div>
-        <div className="graph">
-          <h3>Operating Expenses Forecast</h3>
-          <img
-            src="http://localhost:8000/operating_expenses_forecast"
-            alt="Operating Expenses Forecast"
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
-          <p>Goal: Decrease Operating Expenses to <strong>$80k</strong></p>
-        </div>
-        <div className="graph">
-          <h3>Revenue Forecast</h3>
-          <img
-            src="http://localhost:8000/revenue_forecast"
-            alt="Revenue Forecast"
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
-          <p>Goal: Increase Revenue to <strong>$550k</strong></p>
+
+        {/* Card 4: Revenue Forecast */}
+        <div className="graph-card">
+          <div className="card-header">
+            <h3>Goal: Revenue Forecast</h3>
+          </div>
+          <div className="card-body">
+            <img
+              src="http://localhost:8000/revenue_forecast"
+              alt="Revenue Forecast"
+            />
+          </div>
+          <div className="card-footer">
+            <p className="footer-warning">Revenue is on track</p>
+            <div className="footer-extra">
+              <div className="footer-timeframe">Timeframe: Q3 2025</div>
+              <div className="footer-progress-bar">
+                <div
+                  className="footer-progress-fill"
+                  style={{ width: "75%", backgroundColor: "green" }}
+                ></div>
+              </div>
+              <p className="footer-progress-percentage">75% achieved</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

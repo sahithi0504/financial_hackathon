@@ -1,183 +1,103 @@
+/* Full CSS for Financial Graph Cards with Bigger Text */
+
 .goal-tracker {
   padding: 2rem;
   font-family: Arial, sans-serif;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
+/* Financial Graphs Section */
+.graphs-section {
+  margin-top: 2rem;
 }
 
-.add-btn {
-  background-color: #d8f7da;
-  color: rgb(0, 0, 0);
-  padding: 0.6rem 1rem;
-  font-size: 0.9rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.graphs-section h2 {
+  text-align: left;
+  margin-bottom: 1rem;
+  font-size: 2rem; /* Increase heading size for the section title */
 }
 
-.goal-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-}
-
-.goal-card {
+.graph-card {
   background: #f9fafb;
   padding: 1rem;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
 }
 
-.goal-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.goal-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.card-header {
+  border-bottom: 1px solid #e5e7eb;
   margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
 }
 
-.goal-icon {
-  font-size: 1.4rem;
-  color: #53c75f;
+.card-header h3 {
+  margin: 0;
+  text-align: center;
+  font-size: 1.8rem; /* Increase the card header text */
 }
 
-.goal-meta {
-  font-size: 0.9rem;
-  margin: 0.2rem 0;
+.card-body {
+  text-align: center;
 }
 
-.progress-bar {
+.card-body img {
+  max-width: 100%;
+  height: auto;
+}
+
+.card-body p {
+  margin-top: 0.5rem;
+  font-size: 1rem; /* Increase body text size */
+}
+
+.card-footer {
+  border-top: 1px solid #e5e7eb;
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  text-align: center;
+}
+
+/* Warning text in the footer */
+.footer-warning {
+  color: #d14343; /* Red color for warning text */
+  font-style: italic;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem; /* Increase warning text size */
+}
+
+/* Extra Footer Section for Financial Graph Cards */
+.footer-extra {
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Timeframe label */
+.footer-timeframe {
+  font-size: 1rem; /* Increase timeframe text size */
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+/* Progress Bar */
+.footer-progress-bar {
   width: 100%;
-  height: 10px;
+  height: 12px; /* Slightly taller bar for better visibility */
   background-color: #e5e7eb;
   border-radius: 6px;
-  margin: 0.5rem 0;
+  margin-bottom: 0.5rem;
 }
 
-.progress-fill {
+.footer-progress-fill {
   height: 100%;
   border-radius: 6px;
   transition: width 0.3s ease-in-out;
 }
 
-.goal-percentage {
-  font-size: 0.85rem;
+/* Percentage text to the right of the progress bar */
+.footer-progress-percentage {
+  font-size: 1rem; /* Increase percentage text size */
   color: #4b5563;
-  margin-bottom: 0.5rem;
-}
-
-.goal-timeframe {
-  font-size: 0.85rem;
-  margin-bottom: 0.5rem;
-  color: #6b7280;
-}
-
-.goal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.edit-btn{
-  color:#000000;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
- .delete-btn {
-  color:#ef4444;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
-.edit-btn:hover {
-  color: #3b82f6;
-}
-
-.delete-btn:hover {
-  color: #ef4444;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0,0,0,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 10px;
-  max-width: 400px;
-  width: 90%;
-}
-
-.modal h3 {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
-  font-weight: 500;
-  margin-bottom: 0.3rem;
-}
-
-.form-group input, .form-group select {
-  padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.save-btn {
-  background-color: #10b981;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.cancel-btn {
-  background-color: #f87171;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+  margin: 0;
+  text-align: right;
 }
