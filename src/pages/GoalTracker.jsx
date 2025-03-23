@@ -45,7 +45,7 @@ const GoalTracker = () => {
     title: "",
     target: "",
     actual: "",
-    timeframe: new Date(), 
+    timeframe: new Date(),
   });
 
   const iconOptions = {
@@ -57,7 +57,13 @@ const GoalTracker = () => {
   const openModal = () => setShowModal(true);
   const closeModal = () => {
     setShowModal(false);
-    setNewGoal({ icon: "revenue", title: "", target: "", actual: "", timeframe: new Date() });
+    setNewGoal({
+      icon: "revenue",
+      title: "",
+      target: "",
+      actual: "",
+      timeframe: new Date(),
+    });
   };
 
   const handleChange = (e) => {
@@ -207,6 +213,47 @@ const GoalTracker = () => {
           </div>
         </div>
       )}
+
+      {/* Graphs Section for GoalTracker */}
+      <div className="graphs-section">
+        <h2>Financial Graphs</h2>
+        <div className="graph">
+          <h3>Top Risky Bar Chart</h3>
+          <img
+            src="http://localhost:8000/top_risky_bar_chart"
+            alt="Top Risky Bar Chart"
+            style={{ maxWidth: "100%", height: "auto" }}
+          />
+          <p>Goal: Monthly Invoices &lt; $30k</p>
+        </div>
+        <div className="graph">
+          <h3>Net Income Forecast</h3>
+          <img
+            src="http://localhost:8000/net_income_forecast"
+            alt="Net Income Forecast"
+            style={{ maxWidth: "100%", height: "auto" }}
+          />
+          <p>Goal: Increase Net Income to <strong>$220k</strong></p>
+        </div>
+        <div className="graph">
+          <h3>Operating Expenses Forecast</h3>
+          <img
+            src="http://localhost:8000/operating_expenses_forecast"
+            alt="Operating Expenses Forecast"
+            style={{ maxWidth: "100%", height: "auto" }}
+          />
+          <p>Goal: Decrease Operating Expenses to <strong>$80k</strong></p>
+        </div>
+        <div className="graph">
+          <h3>Revenue Forecast</h3>
+          <img
+            src="http://localhost:8000/revenue_forecast"
+            alt="Revenue Forecast"
+            style={{ maxWidth: "100%", height: "auto" }}
+          />
+          <p>Goal: Increase Revenue to <strong>$550k</strong></p>
+        </div>
+      </div>
     </div>
   );
 };
