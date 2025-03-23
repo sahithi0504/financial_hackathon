@@ -1,7 +1,7 @@
-# Logs
+L#ogs
 logs
-*.log
-npm-debug.log*
+.log
+npm-debug.log
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
@@ -10,20 +10,19 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-*.local
+.local
 
 models/venv
 .venv-py311
 .venv
 
-# Editor directories and files
-.vscode/*
+#Editor directories and files
+.vscode/
 !.vscode/extensions.json
 .idea
 .DS_Store
 *.suo
-*.ntvs*
+.ntvs
 *.njsproj
 *.sln
 *.sw?
-
