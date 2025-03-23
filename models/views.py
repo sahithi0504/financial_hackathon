@@ -1,5 +1,10 @@
 from profit_loss import generate_forecast_plot
-
+from invoice_model import (
+    generate_risk_distribution_plot,
+    generate_top_risky_customers_plot,
+    get_risky_customers_data
+)
+import matplotlib.pyplot as plt
 
 
 def revenue_forecast():
@@ -21,4 +26,17 @@ def net_income_forecast():
 def financial_standing():
     plot = generate_forecast_plot('Financial Standing', 'darkred')
     return plot 
+
+def risk_pie_chart():
+    plot = generate_risk_distribution_plot()
+    return plot
+
+def top_risky_bar_chart():
+    plot = generate_top_risky_customers_plot()
+    return plot
+
+def risky_customers_json():
+    data = get_risky_customers_data()
+    return data
+
 
