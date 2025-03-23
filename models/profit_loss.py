@@ -67,3 +67,5 @@ def generate_forecast_plot(feature_name: str, feature_color: str):
 
     # Show the plot directly
     plt.show()
+
+generate_forecast_plot("Net Income", 'blue')
