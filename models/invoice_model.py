@@ -7,7 +7,7 @@ import seaborn as sns
 
 # shared model training function
 def _train_and_predict():
-    df = pd.read_csv("/Users/chloegray/Documents/GitHub/financial_hackathon/models/aggregated_invoice_data.csv")
+    df = pd.read_csv("aggregated_invoice_data.csv")
 
     features = [
         "invoice_count",
