@@ -6,6 +6,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from sklearn.preprocessing import MinMaxScaler
+import os
 
 class LSTMModel(nn.Module):
     def __init__(self, input_size=5, hidden_size=128, num_layers=2, dropout=0.2, forecast_horizon=7):
@@ -26,7 +27,7 @@ class LSTMModel(nn.Module):
         return out
 
 class StockForecaster:
-    def __init__(self, csv_path='costco_stock_data.csv'):
+    def __init__(self, csv_path='/Users/chloegray/Documents/GitHub/financial_hackathon/models/costco_stock_data.csv'):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.SEQ_LENGTH = 60
         self.FORECAST_HORIZON = 7
@@ -55,7 +56,9 @@ class StockForecaster:
             forecast_horizon=self.FORECAST_HORIZON
         ).to(self.device)
 
-        self.model.load_state_dict(torch.load('best_lstm_model.pth', map_location=self.device))
+        model_path = os.path.join(os.path.dirname(__file__), "best_lstm_model.pth")
+        self.model.load_state_dict(torch.load(model_path, map_location=self.device))
+
         self.model.eval()
 
     def create_sequences(self, data, seq_length, forecast_horizon):
