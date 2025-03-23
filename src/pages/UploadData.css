@@ -1,0 +1,87 @@
+.upload-container {
+    padding: 2rem;
+    background-color: #fff;
+    color: #1f2937;
+    min-height: 100vh;
+    font-family: sans-serif;
+  }
+  
+  .upload-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .upload-section {
+    background-color: #f3f4f6;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+  }
+  
+  .upload-section h3.upload-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .upload-icon {
+    color: #53c75f;
+    font-size: 1.5rem;
+  }
+  
+  .upload-section input {
+    margin-bottom: 0.5rem;
+  }
+  
+  .file-name {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin-top: 0.25rem;
+  }
+  
+  .upload-section button {
+    background-color: #a2dda6;
+    color: #1f2937;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .upload-section button:hover {
+    background-color: #53c75f;
+  }
+  
+  .timestamp {
+    margin-top: 0.5rem;
+    color: #6b7280;
+    font-size: 0.9rem;
+  }
+  
+  .preview-table {
+    margin-top: 1rem;
+    overflow-x: auto;
+  }
+  
+  .preview-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  
+  .preview-table th,
+  .preview-table td {
+    border: 1px solid #d1d5db;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .preview-table th {
+    background-color: #e5e7eb;
+  }

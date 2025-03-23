@@ -1,0 +1,143 @@
+.notification-page {
+  padding: 2rem;
+  font-family: sans-serif;
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.notification-card {
+  background-color: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.notification-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bell-icon {
+  font-size: 1.5rem;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.switch input {
+  display: none;
+}
+.slider {
+  width: 36px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+}
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  top: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+input:checked + .slider {
+  background-color: #10b981;
+}
+input:checked + .slider::before {
+  transform: translateX(16px);
+}
+.dnd-label {
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+.tab-button {
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.tab-button.active {
+  background-color: #d8f7da;
+  border-color: #10b981;
+  font-weight: bold;
+}
+
+.day-group {
+  margin-top: 1rem;
+}
+.day-label {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #4b5563;
+}
+
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+.notification-item.unread {
+  font-weight: bold;
+}
+.notification-item.read {
+  color: #6b7280;
+}
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.notif-text {
+  flex: 1;
+  margin-left: 10px;
+}
+.notif-time {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.notification-footer {
+  text-align: right;
+  margin-top: 1rem;
+}
+.mark-read-btn {
+  background-color: #d8f7da;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.mark-read-btn:hover {
+  background-color: #bdf1c1;
+}
