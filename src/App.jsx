@@ -23,6 +23,7 @@ function AppLayout({ children }) {
     <div className={`app-container ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <Sidebar isCollapsed={isSidebarCollapsed} onToggle={handleSidebarToggle} />
       <div className="main-content">
+      {children}
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/model-insights" element={<ModelInsights />} />
