@@ -10,8 +10,7 @@
     font-size: 2rem;
     margin-bottom: 2rem;
   }
-  
-  /* Profile Section */
+
   .profile-section {
     background: #f9fafb;
     padding: 1.5rem;
@@ -60,7 +59,6 @@
     border-radius: 4px;
   }
   
-  /* Grid of setting cards */
   .settings-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));

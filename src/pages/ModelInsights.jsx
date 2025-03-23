@@ -1,7 +1,6 @@
-// src/pages/ModelInsights.jsx
 
 import React from 'react';
-import './ModelInsights.css'; // Optional: only if you'll add custom styles
+import './ModelInsights.css'; 
 
 function ModelInsights() {
   return (

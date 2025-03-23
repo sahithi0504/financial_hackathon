@@ -1,4 +1,4 @@
-/* Overall Container */
+
 .dashboard-container {
   padding: 2rem;
   background-color: #ffffff;
@@ -7,13 +7,13 @@
   color: #1f2937;
 }
 
-/* Title */
+
 .dashboard-title {
   font-size: 2rem;
   margin-bottom: 2rem;
 }
 
-/* Top Row: Risk & Goal side-by-side */
+
 .top-row {
   display: flex;
   gap: 20px;
@@ -21,7 +21,7 @@
   align-items: stretch;
 }
 
-/* Risk Card and Goal Card share similar styles */
+
 .risk-card{
   flex: 1;
   background-color: #f3f4f6;
@@ -53,13 +53,13 @@
   text-align: center;
 }
 
-/* Dotted Circular Progress */
+
 .dotted-circular-progress {
   display: block;
   margin: 0 auto;
 }
 
-/* Risk Label */
+
 .risk-label {
   font-size: 1rem;
   font-weight: 500;
@@ -67,7 +67,7 @@
   text-align: center;
 }
 
-/* Goal Card List */
+
 .goal-list {
   list-style: none;
   padding: 0;
@@ -110,7 +110,7 @@
   color: #6b7280;
 }
 
-/* Info Cards (Row 2) */
+
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -144,7 +144,6 @@
   color: gray;
 }
 
-/* Charts Row (Row 3) */
 .charts-row {
   display: flex;
   gap: 20px;
@@ -166,7 +165,6 @@
   color: #1f2937;
 }
 
-/* Invoices Section (Row 4) */
 .invoices-section {
   background-color: #f3f4f6;
   padding: 1.5rem;
@@ -205,7 +203,6 @@
   padding: 0.75rem 0;
 }
 
-/* Invoice Status Labels */
 .invoice-status {
   padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;

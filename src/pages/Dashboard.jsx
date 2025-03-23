@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -9,13 +8,11 @@ import {
 } from "recharts";
 import "./Dashboard.css";
 
-// ================= GOALS (static) =================
 const goals = [
   { label: "Increase Revenue", goal: 15000, current: 12000 },
   { label: "Reduce Expenses", goal: 8000, current: 7000 },
 ];
 
-// ========== Helper: Risk Color & Label ==========
 function getRiskColorByPercentage(percentage) {
   if (percentage >= 80) return "#EF4444";
   if (percentage >= 40) return "#F59E0B";
@@ -28,7 +25,6 @@ function getRiskLabel(percentage) {
   return "Low";
 }
 
-// ========== Risk Score Dotted Circle ==========
 function DottedCircularProgress({ percentage = 85, size = 100, segments = 20, dotRadius = 4 }) {
   const activeCount = Math.round((percentage / 100) * segments);
   const activeColor = getRiskColorByPercentage(percentage);
@@ -52,7 +48,6 @@ function DottedCircularProgress({ percentage = 85, size = 100, segments = 20, do
   );
 }
 
-// ========== Reusable Card ==========
 function Card({ title, value, change }) {
   return (
     <motion.div className="card" whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}>
@@ -63,7 +58,6 @@ function Card({ title, value, change }) {
   );
 }
 
-// ========== Dashboard ==========
 export default function Dashboard() {
   const [plData, setPlData] = useState([]);
   const [stockData, setStockData] = useState([]);
@@ -72,9 +66,7 @@ export default function Dashboard() {
 
   const riskScore = 19;
 
-  // Load CSVs on mount
   useEffect(() => {
-    // P&L
     fetch("/quarterly_data.csv")
       .then(res => res.text())
       .then(csv => {
@@ -88,7 +80,6 @@ export default function Dashboard() {
         setPlData(data);
       });
 
-    // Stock
     fetch("/costco_stock_data.csv")
       .then(res => res.text())
       .then(csv => {
@@ -100,7 +91,6 @@ export default function Dashboard() {
         setStockData(rows);
       });
 
-    // Invoices
     fetch("/aggregated_invoice_data.csv")
       .then(res => res.text())
       .then(csv => {
@@ -116,7 +106,6 @@ export default function Dashboard() {
       });
   }, []);
 
-  // Revenue Summary
   const last = plData[plData.length - 1] || {};
   const quarterlyRevenue = last.revenue ? `$${last.revenue.toLocaleString()}` : "$0";
   const quarterlyExpenses = last.expenses ? `$${last.expenses.toLocaleString()}` : "$0";
@@ -126,7 +115,6 @@ export default function Dashboard() {
     <div className="dashboard-container">
       <h2 className="dashboard-title">Welcome back, Analyst!</h2>
 
-      {/* Risk + Goals */}
       <div className="top-row">
         <motion.div className="risk-card" whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}>
           <h3 className="section-title">Risk Score</h3>
@@ -154,14 +142,12 @@ export default function Dashboard() {
         </motion.div>
       </div>
 
-      {/* Info Cards */}
       <div className="cards-grid">
         <Card title="Quarterly Revenue" value={quarterlyRevenue} change="↑ 5.2% from last quarter" />
         <Card title="Operating Expenses" value={quarterlyExpenses} change="↓ 2.1% from last quarter" />
         <Card title="Net Profit" value={quarterlyNetIncome} change="↑ 3.4% from last quarter" />
       </div>
 
-      {/* Charts */}
       <div className="charts-row">
         <motion.div className="chart" whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}>
           <h3 className="chart-title">Profit & Loss Overview (Quarterly)</h3>
@@ -195,7 +181,6 @@ export default function Dashboard() {
         </motion.div>
       </div>
 
-      {/* Invoices Table */}
       <motion.div className="invoices-section" whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}>
         <h3 className="invoices-title">Invoices</h3>
         <table className="invoices-table">
