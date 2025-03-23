@@ -15,6 +15,7 @@ dist-ssr
 models/venv
 .venv-py311
 .venv
+venv
 
 # Editor directories and files
 .vscode/*
