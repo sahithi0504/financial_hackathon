@@ -25,7 +25,16 @@
   .sidebar.collapsed {
     width: 80px;
   }
-  
+  /* Ensure logout button is centered when sidebar is collapsed */
+.sidebar.collapsed .logout-button {
+  justify-content: center;
+  margin-right: -15px; 
+  padding: 10px;
+}
+
+.sidebar.collapsed .logout-button .icon {
+  margin-right: 0;
+}
   /* Logo and Collapse Button Section */
   .logo-section {
     display: flex;
@@ -67,7 +76,7 @@
   .toggle-icon {
     font-size: 1.2rem;
     cursor: pointer;
-    margin-right: 0; /* pushes the arrow to the right in the logo section */
+    margin-right: 10px; /* pushes the arrow to the right in the logo section */
     padding: 2px 8px;  /* spacing around the arrow */
     border-radius: 90px;
     background-color: #d8f7da; /* green background */
