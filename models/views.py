@@ -1,12 +1,5 @@
 from profit_loss import generate_forecast_plot
 
-feature_colors = {
-    "Revenue": "blue",
-    "Gross Profit": "green",
-    "Operating Expenses": "purple",
-    "Net Income": "orange",
-    "Financial Standing": "darkred"
-}
 
 
 def revenue_forecast():
