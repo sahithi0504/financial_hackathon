@@ -158,7 +158,7 @@ const GoalTracker = () => {
             <div className="form-group">
               <label>Icon Type</label>
               <select name="icon" value={newGoal.icon} onChange={handleChange}>
-                <option value="revenue">Revenue</option>
+                <option value="revenue">Stock</option>
                 <option value="invoices">Invoices</option>
                 <option value="profit">Profit</option>
               </select>

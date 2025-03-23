@@ -182,3 +182,13 @@
   border-radius: 6px;
   cursor: pointer;
 }
+
+.goal-suggestion {
+  background-color: #f0f8ff;
+  padding: 8px;
+  margin-top: 10px;
+  border-left: 4px solid #0077cc;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+
