@@ -59,7 +59,6 @@ def stock_trend_signal_text():
     signal = forecaster.generate_trend_signal()
     return signal
 
-
 if __name__ == '__main__':
     print('haha')
 
