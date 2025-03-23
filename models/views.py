@@ -29,5 +29,3 @@ def financial_standing():
     plot = generate_forecast_plot('Financial Standing', 'darkred')
     return plot 
 
-if __name__ == '__main__':
-    financial_standing()
