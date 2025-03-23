@@ -45,6 +45,8 @@ def stock_trend_graph():
     fig = forecaster.plot_predictions()
     return fig
 
+
+#"The 7-day forecast indicates a stable trend, with an average projected closing price of $905.42, representing a slight decrease of 0.42% from the most recent close of $909.26."
 def stock_trend_signal_text():
     forecaster = StockForecaster()
     signal = forecaster.generate_trend_signal()
