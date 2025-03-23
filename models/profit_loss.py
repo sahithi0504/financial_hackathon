@@ -10,7 +10,7 @@ def generate_forecast_plot(feature_name: str, feature_color: str):
     warnings.filterwarnings("ignore", category=FutureWarning)
 
     # Load and preprocess dataset
-    df = pd.read_csv("/Users/chloegray/Documents/GitHub/financial_hackathon/models/costco_profit.csv")
+    df = pd.read_csv("costco_profit.csv")
     df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%y')
     df.set_index('Date', inplace=True)
 
