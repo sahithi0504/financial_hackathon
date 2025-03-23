@@ -28,14 +28,14 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # allow all origins
-    allow_credentials=False,  # cannot use "*" if True is set here
+    allow_credentials=False,  
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 @app.get("/revenue_forecast")
 def get_revenue_forecast():
-    fig = revenue_forecast()  # This is your matplotlib figure
+    fig = revenue_forecast()  
 
     # Convert the figure to PNG
     buf = io.BytesIO()
