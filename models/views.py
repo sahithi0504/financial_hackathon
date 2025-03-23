@@ -6,22 +6,10 @@ from invoice_model import (
 )
 import matplotlib.pyplot as plt
 from stock_price import StockForecaster
-from flask import Flask, jsonify
-from flask_cors import CORS
-import base64
+from fastapi import FastAPI, Response
 import io
+import base64
 
-views = Flask(__name__)
-CORS(views) #frontend access baby
-
-
-def encoding_plots(fig):
-    buf = io.BytesIO()
-    fig.savefig(buf, format = 'png')
-    buf.seek(0)
-    encoded = base64.b64encode(buf.read()).decode('utf-8')
-    buf.close()
-    return encoded
 
 #graph
 def revenue_forecast():
@@ -71,11 +59,7 @@ def stock_trend_signal_text():
     signal = forecaster.generate_trend_signal()
     return signal
 
-@views.route('/api/revenue_forecast_route', methods = ['GET'])
-def revenue_forecast_route():
-    fig = generate_forecast_plot('Revenue', 'blue')
-    return jsonify({"image": encoding_plots(fig)})
 
 if __name__ == '__main__':
-    views.run(debug=True)
+    print('haha')
 

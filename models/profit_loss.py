@@ -52,20 +52,18 @@ def generate_forecast_plot(feature_name: str, feature_color: str):
     forecast_dates = [last_date + pd.DateOffset(months=3 * (i + 1)) for i in range(2)]
 
     # Plotting
-    plt.figure(figsize=(10, 6))
-    plt.plot(series.index, series.values, label=f'Historical {feature_name}', marker='o', color=feature_color)
-    plt.plot(forecast_dates, forecast.values, label=f'Forecasted {feature_name}', color='red', marker='o', linewidth=2)
-    plt.plot([series.index[-1], forecast_dates[0]], [series.values[-1], forecast.values[0]],
-             color='red', linestyle='--', linewidth=1.5)
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(series.index, series.values, label=f'Historical {feature_name}', marker='o', color=feature_color)
+    ax.plot(forecast_dates, forecast.values, label=f'Forecasted {feature_name}', color='red', marker='o', linewidth=2)
+    ax.plot([series.index[-1], forecast_dates[0]], [series.values[-1], forecast.values[0]],
+    color='red', linestyle='--', linewidth=1.5)
 
-    plt.xlabel('Date')
-    plt.ylabel(feature_name)
-    plt.title(f'{feature_name} Forecast')
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
+    ax.set_xlabel('Date')
+    ax.set_ylabel(feature_name)
+    ax.set_title(f'{feature_name} Forecast')
+    ax.legend()
+    ax.grid(True)
 
-    # Show the plot directly
-    plt.show()
+    # Return the Figure object
+    return fig
 
-generate_forecast_plot("Net Income", 'blue')
