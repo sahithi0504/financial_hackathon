@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import './sidebar.css';
 import { 
-  FaBars, FaSearch, FaHome, FaChartLine, FaExclamationTriangle, 
-  FaBullseye, FaUpload, FaCog, FaSignOutAlt, FaMoon 
+  FaSearch, FaHome, FaChartLine,  FaBell, 
+  FaBullseye, FaUpload, FaCog, FaSignOutAlt, FaMoon, FaSun
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -14,15 +14,17 @@ function Sidebar({ isCollapsed, onToggle }) {
   const navItems = [
     { title: 'Dashboard', icon: <FaHome />, link: '/' },
     { title: 'Model Insights', icon: <FaChartLine />, link: '/model-insights' },
-    { title: 'Risk Summary', icon: <FaExclamationTriangle />, link: '/risk-summary' },
     { title: 'Goals Tracker', icon: <FaBullseye />, link: '/goals-tracker' },
     { title: 'Upload Data', icon: <FaUpload />, link: '/upload-data' },
+    { title: 'Notification', icon: <FaBell />, link: '/notification' },
     { title: 'Settings', icon: <FaCog />, link: '/settings' }
   ];
 
   const [activeNav, setActiveNav] = useState(navItems[0].title);
 
-  const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   // Filter navigation items based on search query (case-insensitive)
   const filteredNavItems = navItems.filter(item =>
@@ -37,8 +39,11 @@ function Sidebar({ isCollapsed, onToggle }) {
           <span className="logo-icon">FS</span>
           {!isCollapsed && <span className="logo-name">FiscalFocus</span>}
         </div>
-        {/* Use the onToggle passed from App */}
-        <FaBars className="toggle-icon" onClick={onToggle} />
+  
+        {/* NEW: Simple arrow toggle instead of FaBars */}
+        <span className="toggle-icon" onClick={onToggle}>
+          {isCollapsed ? '>' : '<'}
+        </span>
       </div>
 
       {/* Spacer */}
@@ -60,7 +65,10 @@ function Sidebar({ isCollapsed, onToggle }) {
       {/* Navigation Links */}
       <ul className="nav-links">
         {filteredNavItems.map((item, index) => (
-          <li key={index} className={activeNav === item.title ? 'active' : ''}>
+          <li 
+            key={index} 
+            className={activeNav === item.title ? 'active' : ''}
+          >
             <Link to={item.link} onClick={() => setActiveNav(item.title)}>
               <span className="icon">{item.icon}</span>
               {!isCollapsed && <span className="link-name">{item.title}</span>}
@@ -74,18 +82,20 @@ function Sidebar({ isCollapsed, onToggle }) {
 
       {/* Dark/Light Mode Section */}
       <div className="mode" onClick={toggleDarkMode}>
-        {!isCollapsed && (
-          <div className="left-section">
-            <FaMoon className="icon" />
+        <div className="left-section">
+          {isDarkMode ? <FaSun className="icon" /> : <FaMoon className="icon" />}
+          {!isCollapsed && (
             <span className="mode-text">
               {isDarkMode ? 'Light Mode' : 'Dark Mode'}
             </span>
-          </div>
-        )}
-        <div className="toggle-switch">
+          )}
+        </div>
+        <div className={`toggle-switch ${isDarkMode ? 'active' : ''}`}>
           <span className="switch" />
         </div>
       </div>
+      
+
 
       {/* Logout Button */}
       <div className="logout-section">

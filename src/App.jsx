@@ -5,7 +5,7 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard'; 
 import GoalTracker from './pages/GoalTracker';
 import './index.css';
-
+import Notification from './pages/Notification';
 function App() {
   // Lift the collapsed state up here
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -23,6 +23,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/goals-tracker" element={<GoalTracker />} />
+            <Route path="/notification" element={<Notification />} />
             {/* Additional routes can be added later */}
           </Routes>
         </div>
