@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
-import Dashboard from './pages/Dashboard'; 
-import ModelInsights from './pages/ModelInsights'; 
+import Dashboard from './pages/Dashboard';
+import ModelInsights from './pages/ModelInsights';
 import GoalTracker from './pages/GoalTracker';
 import UploadData from './pages/UploadData';
 import Settings from './pages/Settings';
@@ -11,7 +11,6 @@ import Home from './home';
 import ProtectedRoute from './ProtectedRoute';
 import './index.css';
 
-// Layout used for authenticated routes
 function AppLayout({ children }) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
@@ -23,15 +22,7 @@ function AppLayout({ children }) {
     <div className={`app-container ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <Sidebar isCollapsed={isSidebarCollapsed} onToggle={handleSidebarToggle} />
       <div className="main-content">
-      {children}
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/model-insights" element={<ModelInsights />} />
-          <Route path="/goals-tracker" element={<GoalTracker />} />
-          <Route path="/notification" element={<Notification />} />
-          <Route path="/upload-data" element={<UploadData />} />
-          <Route path="/settings" element={<Settings />} />
-        </Routes>
+        {children}
       </div>
     </div>
   );
@@ -43,8 +34,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
 
-        {/* Protected Routes wrapped in AppLayout */}
-        <Route path="/dashboard" element={
+        {/* All Protected Routes Below */}
+        <Route path="/dashboard/*" element={
           <ProtectedRoute>
             <AppLayout>
               <Dashboard />
@@ -52,7 +43,15 @@ function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/goals-tracker" element={
+        <Route path="/model-insights/*" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <ModelInsights />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/goals-tracker/*" element={
           <ProtectedRoute>
             <AppLayout>
               <GoalTracker />
@@ -60,7 +59,7 @@ function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/notification" element={
+        <Route path="/notification/*" element={
           <ProtectedRoute>
             <AppLayout>
               <Notification />
@@ -68,7 +67,7 @@ function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/upload-data" element={
+        <Route path="/upload-data/*" element={
           <ProtectedRoute>
             <AppLayout>
               <UploadData />
@@ -76,7 +75,7 @@ function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/settings" element={
+        <Route path="/settings/*" element={
           <ProtectedRoute>
             <AppLayout>
               <Settings />

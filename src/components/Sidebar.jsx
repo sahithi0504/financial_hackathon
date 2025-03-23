@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './sidebar.css';
 import { 
-  FaSearch, FaHome, FaChartLine,  FaBell, 
+  FaSearch, FaHome, FaChartLine, FaBell, 
   FaBullseye, FaUpload, FaCog, FaSignOutAlt, FaMoon, FaSun
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -26,30 +26,23 @@ function Sidebar({ isCollapsed, onToggle }) {
     setIsDarkMode(!isDarkMode);
   };
 
-  // Filter navigation items based on search query (case-insensitive)
   const filteredNavItems = navItems.filter(item =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isDarkMode ? 'dark' : ''}`}>
-      {/* Logo and Collapse Button */}
       <div className="logo-section">
         <div className="logo">
-          <span className="logo-icon">FS</span>
           {!isCollapsed && <span className="logo-name">FiscalFocus</span>}
         </div>
-  
-        {/* NEW: Simple arrow toggle instead of FaBars */}
         <span className="toggle-icon" onClick={onToggle}>
           {isCollapsed ? '>' : '<'}
         </span>
       </div>
 
-      {/* Spacer */}
       <div className="top-spacer"></div>
 
-      {/* Search Box */}
       <div className="search-box">
         <FaSearch className="search-icon" />
         {!isCollapsed && (
@@ -62,7 +55,6 @@ function Sidebar({ isCollapsed, onToggle }) {
         )}
       </div>
 
-      {/* Navigation Links */}
       <ul className="nav-links">
         {filteredNavItems.map((item, index) => (
           <li 
@@ -77,10 +69,8 @@ function Sidebar({ isCollapsed, onToggle }) {
         ))}
       </ul>
 
-      {/* Separator Line above Dark/Light Mode */}
       <hr className="separator" />
 
-      {/* Dark/Light Mode Section */}
       <div className="mode" onClick={toggleDarkMode}>
         <div className="left-section">
           {isDarkMode ? <FaSun className="icon" /> : <FaMoon className="icon" />}
@@ -94,10 +84,7 @@ function Sidebar({ isCollapsed, onToggle }) {
           <span className="switch" />
         </div>
       </div>
-      
 
-
-      {/* Logout Button */}
       <div className="logout-section">
         <Link to="/logout" className="logout-button">
           <FaSignOutAlt className="icon" />
