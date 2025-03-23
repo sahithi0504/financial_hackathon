@@ -7,7 +7,7 @@ import seaborn as sns
 
 # shared model training function
 def _train_and_predict():
-    df = pd.read_csv("aggregated_invoice_data.csv")
+    df = pd.read_csv("models/aggregated_invoice_data.csv")
 
     features = [
         "invoice_count",
@@ -28,7 +28,6 @@ def _train_and_predict():
 
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
-    print(f"\n Model trained. Accuracy on test set: {accuracy:.2f}")
 
     df["predicted_risk"] = model.predict(X)
     return df

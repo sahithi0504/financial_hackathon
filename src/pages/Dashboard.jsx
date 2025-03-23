@@ -65,46 +65,50 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   const riskScore = 19;
+  const [revenueImg, setRevenueImg] = useState(null);
+  const [expensesImg, setExpensesImg] = useState(null);
+  const [netIncomeImg, setNetIncomeImg] = useState(null);
+
+
 
   useEffect(() => {
-    fetch("/quarterly_data.csv")
-      .then(res => res.text())
-      .then(csv => {
-        const parsed = Papa.parse(csv, { header: true });
-        const data = parsed.data.filter(row => row["Date"] || row["Date "]).map(row => ({
-          date: (row["Date"] || row["Date "]).trim(),
-          revenue: +((row["Revenue"] || "0").replace(/,/g, "")),
-          expenses: +((row["Operating Expenses"] || "0").replace(/,/g, "")),
-          netIncome: +((row["Net Income"] || "0").replace(/,/g, ""))
-        }));
-        setPlData(data);
-      });
-
-    fetch("/costco_stock_data.csv")
-      .then(res => res.text())
-      .then(csv => {
-        const parsed = Papa.parse(csv, { header: true });
-        const rows = parsed.data.slice(-7).map(row => ({
-          name: row["Date"],
-          stock: parseFloat(row["Close"]) || 0
-        }));
-        setStockData(rows);
-      });
-
-    fetch("/aggregated_invoice_data.csv")
-      .then(res => res.text())
-      .then(csv => {
-        const parsed = Papa.parse(csv, { header: true });
-        const rows = parsed.data.slice(0, 7).map(row => ({
-          id: row["customer_id"],
-          count: row["invoice_count"],
-          amount: `$${parseFloat(row["total_spend"]).toFixed(2)}`,
-          status: row["risk_flag"] === "1" ? "High" : "Low"
+    // Fetch invoice data from backend
+    fetch("http://127.0.0.1:8000/risky_customers_json")
+      .then(res => res.json())
+      .then(data => {
+        // Modify this part if your backend format is different
+        const rows = data.slice(0, 7).map(row => ({
+          id: row.customer_id,
+          count: row.invoice_count,
+          amount: `$${parseFloat(row.total_spend).toFixed(2)}`,
+          status: row.risk_flag === "1" ? "High" : "Low"
         }));
         setInvoiceData(rows);
         setLoading(false);
       });
+  
+    // Fetch stock chart image
+    fetch("http://127.0.0.1:8000/stock_trend_graph")
+      .then(res => res.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        setStockData([{ name: "Stock Chart", imageUrl: url }]); // just for display
+      });
+  
+    // Optional: fetch forecast images if you want to show them
+    fetch("http://127.0.0.1:8000/revenue_forecast")
+      .then(res => res.blob())
+      .then(blob => setRevenueImg(URL.createObjectURL(blob)));
+  
+    fetch("http://127.0.0.1:8000/operating_expenses_forecast")
+      .then(res => res.blob())
+      .then(blob => setExpensesImg(URL.createObjectURL(blob)));
+  
+    fetch("http://127.0.0.1:8000/net_income_forecast")
+      .then(res => res.blob())
+      .then(blob => setNetIncomeImg(URL.createObjectURL(blob)));
   }, []);
+  
 
   const last = plData[plData.length - 1] || {};
   const quarterlyRevenue = last.revenue ? `$${last.revenue.toLocaleString()}` : "$0";
@@ -180,6 +184,13 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </motion.div>
       </div>
+
+      <div className="forecast-charts">
+        {revenueImg && <img src={revenueImg} alt="Revenue Forecast" />}
+        {expensesImg && <img src={expensesImg} alt="Expenses Forecast" />}
+        {netIncomeImg && <img src={netIncomeImg} alt="Net Income Forecast" />}
+        </div>
+
 
       <motion.div className="invoices-section" whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}>
         <h3 className="invoices-title">Invoices</h3>

@@ -27,7 +27,7 @@ class LSTMModel(nn.Module):
         return out
 
 class StockForecaster:
-    def __init__(self, csv_path='costco_stock_data.csv'):
+    def __init__(self, csv_path='models/costco_stock_data.csv'):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.SEQ_LENGTH = 60
         self.FORECAST_HORIZON = 7

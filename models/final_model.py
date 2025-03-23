@@ -12,7 +12,7 @@ def get_risky_percent():
     return risky_percent
 
 def get_net_income_growth():
-    df = pd.read_csv("costco_profit.csv")
+    df = pd.read_csv("models/costco_profit.csv")
     df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%y')
     df.sort_values('Date', inplace=True)
 

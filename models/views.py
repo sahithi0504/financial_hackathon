@@ -1,11 +1,10 @@
-from profit_loss import generate_forecast_plot
-from invoice_model import (
+from models.profit_loss import generate_forecast_plot
+from models.invoice_model import (
     generate_risk_distribution_plot,
     generate_top_risky_customers_plot,
     get_risky_customers_data
 )
-import matplotlib.pyplot as plt
-from stock_price import StockForecaster
+from models.stock_price import StockForecaster
 from fastapi import FastAPI, Response
 import io
 import base64
