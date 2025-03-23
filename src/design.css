@@ -48,7 +48,6 @@ html, body, #root {
   background-color: #f6fdf6;
 }
 
-/* ✅ Updated Hero Text Styling */
 .hero-section h1 {
   font-size: 2.5rem;
   font-weight: bold;
@@ -68,7 +67,6 @@ html, body, #root {
   gap: 1rem;
 }
 
-/* ✅ Only update Get Started Button */
 .hero-actions .primary-btn {
   font-size: 1.1rem;
   padding: 0.75rem 1.5rem;
