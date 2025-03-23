@@ -25,7 +25,6 @@ export default function Settings() {
     <div className="settings-container">
       <h2 className="settings-title">Settings</h2>
 
-      {/* Profile Section at Top */}
       <section className="settings-section profile-section">
         <div className="profile-info">
           <div className="profile-circle"></div>
@@ -55,7 +54,6 @@ export default function Settings() {
         </div>
       </section>
 
-      {/* Settings Cards */}
       <div className="settings-grid">
         <motion.div className="settings-card" whileHover={{ scale: 1.03 }}>
           <h3><FaBell /> Notifications</h3>

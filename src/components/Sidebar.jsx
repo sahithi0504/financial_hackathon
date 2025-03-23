@@ -1,9 +1,10 @@
-// src/components/Sidebar.jsx
+
 import React, { useState } from 'react';
 import './sidebar.css';
 import { 
   FaSearch, FaHome, FaChartLine, FaBell, 
-  FaBullseye, FaUpload, FaCog, FaSignOutAlt, FaMoon, FaSun
+  FaBullseye, FaUpload, FaCog, FaSignOutAlt, FaMoon, FaSun, 
+  FaAngleLeft, FaAngleRight
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -37,7 +38,7 @@ function Sidebar({ isCollapsed, onToggle }) {
           {!isCollapsed && <span className="logo-name">FiscalFocus</span>}
         </div>
         <span className="toggle-icon" onClick={onToggle}>
-          {isCollapsed ? '>' : '<'}
+          {isCollapsed ? <FaAngleRight /> : <FaAngleLeft />}
         </span>
       </div>
 

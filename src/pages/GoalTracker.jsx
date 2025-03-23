@@ -45,7 +45,7 @@ const GoalTracker = () => {
     title: "",
     target: "",
     actual: "",
-    timeframe: new Date(), // Initialize with current date
+    timeframe: new Date(), 
   });
 
   const iconOptions = {
@@ -65,7 +65,6 @@ const GoalTracker = () => {
     setNewGoal((prev) => ({ ...prev, [name]: value }));
   };
 
-  // New handler for date selection
   const handleDateChange = (date) => {
     setNewGoal((prev) => ({ ...prev, timeframe: date }));
   };
@@ -73,7 +72,6 @@ const GoalTracker = () => {
   const addGoal = () => {
     const id = Date.now();
     const icon = iconOptions[newGoal.icon] || <FaMoneyBill />;
-    // Convert the date object to a locale string for display
     const formattedDate =
       newGoal.timeframe instanceof Date
         ? newGoal.timeframe.toLocaleDateString()

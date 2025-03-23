@@ -68,7 +68,6 @@ export default function Notification() {
           </label>
         </div>
 
-        {/* Tabs */}
         <div className="tabs">
           {['All', 'Unread'].map((t) => (
             <button
@@ -81,7 +80,6 @@ export default function Notification() {
           ))}
         </div>
 
-        {/* Notification List */}
         <div className="notification-list">
           {Object.entries(groups).map(([day, items]) => (
             <div key={day} className="day-group">
