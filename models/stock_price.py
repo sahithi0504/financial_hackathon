@@ -1,201 +1,153 @@
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
+import pickle
+import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import pickle
-import matplotlib.pyplot as plt
+from sklearn.preprocessing import MinMaxScaler
+import os
 
-
-# load & scale data
-df = pd.read_csv("costco_stock_data.csv")
-df['Date'] = pd.to_datetime(df['Date'])
-df.sort_values('Date', inplace=True)
-df.reset_index(drop=True, inplace=True)
-data_unscaled = df.copy()
-
-print("Missing values:\n", df.isnull().sum())
-
-features = ['Open', 'High', 'Low', 'Close', 'Volume']
-data = df[features].copy()
-
-scaler = MinMaxScaler(feature_range=(0,1))
-data_scaled = scaler.fit_transform(data)
-
-#save the scaler for inverse transform later
-with open('scaler.pkl', 'wb') as f:
-    pickle.dump(scaler, f)
-
-print("\nData has been scaled. Scaled data shape:", data_scaled.shape)
-
-
-# create sequences (60-day window -> next 7 days)
-def create_sequences(data, seq_length, forecast_horizon):
-    X, y = [], []
-    for i in range(len(data) - seq_length - forecast_horizon + 1):
-        X.append(data[i : i + seq_length])
-        y.append(data[i + seq_length : i + seq_length + forecast_horizon, 3])
-    return np.array(X), np.array(y)
-
-SEQ_LENGTH = 60
-FORECAST_HORIZON = 7
-X_sequences, y_sequence = create_sequences(data_scaled, SEQ_LENGTH, FORECAST_HORIZON)
-
-print("Shape of input sequences (X):", X_sequences.shape)
-print("Shape of targets (y):", y_sequence.shape)
-
-#split for validation, test, training
-total_samples = len(X_sequences)
-train_size = int(0.7 * total_samples)
-val_size = int(0.15 * total_samples)
-test_size = total_samples - train_size - val_size
-
-X_train = X_sequences[:train_size]
-y_train = y_sequence[:train_size]
-X_val = X_sequences[train_size : train_size + val_size]
-y_val = y_sequence[train_size : train_size + val_size]
-X_test = X_sequences[train_size + val_size :]
-y_test = y_sequence[train_size + val_size :]
-
-
-y_train = y_train.reshape(-1, FORECAST_HORIZON)
-y_val = y_val.reshape(-1, FORECAST_HORIZON)
-y_test = y_test.reshape(-1, FORECAST_HORIZON)
-
-# convert to tensors
-X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
-y_train_tensor = torch.tensor(y_train, dtype=torch.float32)
-X_val_tensor = torch.tensor(X_val, dtype=torch.float32)
-y_val_tensor = torch.tensor(y_val, dtype=torch.float32)
-X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
-y_test_tensor = torch.tensor(y_test, dtype=torch.float32)
-
-print("\nPyTorch Tensor Shapes:")
-print("X_train_tensor:", X_train_tensor.shape)
-print("y_train_tensor:", y_train_tensor.shape)
-print("X_val_tensor:", X_val_tensor.shape)
-print("y_val_tensor:", y_val_tensor.shape)
-print("X_test_tensor:", X_test_tensor.shape)
-print("y_test_tensor:", y_test_tensor.shape)
-
-
-# define a LSTM model
 class LSTMModel(nn.Module):
     def __init__(self, input_size=5, hidden_size=128, num_layers=2, dropout=0.2, forecast_horizon=7):
         super(LSTMModel, self).__init__()
         self.lstm = nn.LSTM(
-            input_size, 
-            hidden_size, 
-            num_layers=num_layers, 
-            batch_first=True, 
+            input_size,
+            hidden_size,
+            num_layers=num_layers,
+            batch_first=True,
             dropout=dropout
         )
         self.fc = nn.Linear(hidden_size, forecast_horizon)
 
     def forward(self, x):
-        out, (hn, cn) = self.lstm(x)    
-        out = out[:, -1, :]              
-        out = self.fc(out)               
+        out, _ = self.lstm(x)
+        out = out[:, -1, :]
+        out = self.fc(out)
         return out
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+class StockForecaster:
+    def __init__(self, csv_path='costco_stock_data.csv'):
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.SEQ_LENGTH = 60
+        self.FORECAST_HORIZON = 7
 
-model = LSTMModel(
-    input_size=5,
-    hidden_size=128,
-    num_layers=2,
-    dropout=0.2,
-    forecast_horizon=FORECAST_HORIZON
-).to(device)
+        self.df = pd.read_csv(csv_path)
+        self.df['Date'] = pd.to_datetime(self.df['Date'])
+        self.df.sort_values('Date', inplace=True)
+        self.df.reset_index(drop=True, inplace=True)
 
-criterion = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.0005)
+        features = ['Open', 'High', 'Low', 'Close', 'Volume']
+        data = self.df[features].copy()
 
-# training model
-num_epochs = 250
-best_val_loss = float('inf')
+        self.scaler = MinMaxScaler()
+        self.data_scaled = self.scaler.fit_transform(data)
 
-X_train_tensor = X_train_tensor.to(device)
-y_train_tensor = y_train_tensor.to(device)
-X_val_tensor   = X_val_tensor.to(device)
-y_val_tensor   = y_val_tensor.to(device)
+        with open('scaler.pkl', 'wb') as f:
+            pickle.dump(self.scaler, f)
 
-for epoch in range(num_epochs):
-    #training
-    model.train()
-    optimizer.zero_grad()
+        self.X, self.y = self.create_sequences(self.data_scaled, self.SEQ_LENGTH, self.FORECAST_HORIZON)
 
-    train_output = model(X_train_tensor)  
-    train_loss = criterion(train_output, y_train_tensor)
-    train_loss.backward()
-    optimizer.step()
-    #validation
-    model.eval()
-    with torch.no_grad():
-        val_output = model(X_val_tensor) 
-        val_loss = criterion(val_output, y_val_tensor)
+        self.model = LSTMModel(
+            input_size=5,
+            hidden_size=128,
+            num_layers=2,
+            dropout=0.2,
+            forecast_horizon=self.FORECAST_HORIZON
+        ).to(self.device)
 
-    if val_loss.item() < best_val_loss:
-        best_val_loss = val_loss.item()
-        torch.save(model.state_dict(), 'best_lstm_model.pth')
+        model_path = os.path.join(os.path.dirname(__file__), "best_lstm_model.pth")
+        self.model.load_state_dict(torch.load(model_path, map_location=self.device))
 
-    print(f"Epoch {epoch+1}/{num_epochs} | Train Loss: {train_loss.item():.4f} | Val Loss: {val_loss.item():.4f}")
+        self.model.eval()
 
-# evaluate on test set
-model.load_state_dict(torch.load('best_lstm_model.pth'))
-model.eval()
+    def create_sequences(self, data, seq_length, forecast_horizon):
+        X, y = [], []
+        for i in range(len(data) - seq_length - forecast_horizon + 1):
+            X.append(data[i: i + seq_length])
+            y.append(data[i + seq_length: i + seq_length + forecast_horizon, 3])
+        return np.array(X), np.array(y)
 
-X_test_tensor = X_test_tensor.to(device)
-y_test_tensor = y_test_tensor.to(device)
+    def plot_predictions(self):
+        close_min = self.scaler.data_min_[3]
+        close_max = self.scaler.data_max_[3]
 
-with torch.no_grad():
-    test_pred = model(X_test_tensor) 
-    test_loss = criterion(test_pred, y_test_tensor)
+        latest_60 = self.data_scaled[-self.SEQ_LENGTH:]
+        latest_60_tensor = torch.tensor(latest_60, dtype=torch.float32).unsqueeze(0).to(self.device)
 
-print(f"Test Loss: {test_loss.item():.4f}")
+        with torch.no_grad():
+            latest_pred = self.model(latest_60_tensor).cpu().numpy().flatten()
 
-# inverse transform to normalize data and plot
-close_min = scaler.data_min_[3]
-close_max = scaler.data_max_[3]
+        predicted_close = latest_pred * (close_max - close_min) + close_min
+        forecast_dates = pd.date_range(start=self.df['Date'].iloc[-1] + pd.Timedelta(days=1), periods=self.FORECAST_HORIZON)
 
-test_pred_np = test_pred.cpu().numpy()  
-y_test_np = y_test_tensor.cpu().numpy()  
+        last_60_df = self.df.tail(self.SEQ_LENGTH)
+        fig, ax = plt.subplots(figsize=(14, 6))
 
-test_pred_inv = test_pred_np * (close_max - close_min) + close_min
-y_test_inv = y_test_np * (close_max - close_min) + close_min
+        ax.plot(last_60_df['Date'], last_60_df['Close'], label="Actual Closing Price", color='blue')
+        last_price = last_60_df['Close'].values[-1]
+        last_date = last_60_df['Date'].values[-1]
+        ax.plot([last_date], [last_price], marker='o', color='blue')
 
-latest_60 = data_scaled[-SEQ_LENGTH:]  
-latest_60_tensor = torch.tensor(latest_60, dtype=torch.float32).unsqueeze(0).to(device)  
+        ax.plot(forecast_dates, predicted_close, label="Predicted Closing Price", linestyle='--', color='orange')
+        ax.plot([last_date, forecast_dates[0]], [last_price, predicted_close[0]], linestyle='--', color='orange', alpha=0.6)
 
-model.eval()
-with torch.no_grad():
-    latest_pred = model(latest_60_tensor).cpu().numpy().flatten()  
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Stock Price")
+        ax.set_title("Actual vs Predicted Closing Prices")
+        ax.legend()
+        fig.tight_layout()
 
-predicted_close = latest_pred * (close_max - close_min) + close_min
+        return fig
+    
+    def generate_trend_signal(self):
+        """
+        Analyzes the 7-day forecast and returns a trend signal
+        Positive Trend, Negative Trend, Stable
+        """
 
-forecast_dates = pd.date_range(start=df['Date'].iloc[-1] + pd.Timedelta(days=1), periods=FORECAST_HORIZON)
+        close_min = self.scaler.data_min_[3]
+        close_max = self.scaler.data_max_[3]
 
-last_60_df = df.tail(60)
-plt.figure(figsize=(14,6))
+        latest_60 = self.data_scaled[-self.SEQ_LENGTH:]
+        latest_60_tensor = torch.tensor(latest_60, dtype=torch.float32).unsqueeze(0).to(self.device)
 
-# plot last 60 days of actual closing prices
-plt.plot(last_60_df['Date'], last_60_df['Close'], label="Actual Closing Price", color='blue')
+        with torch.no_grad():
+            latest_pred = self.model(latest_60_tensor).cpu().numpy().flatten()
 
-# plot last actual close
-last_price = last_60_df['Close'].values[-1]
-last_date = last_60_df['Date'].values[-1]
-plt.plot([last_date], [last_price], marker='o', color='blue')
+        predicted_close = latest_pred * (close_max - close_min) + close_min
 
-# plot predicted future 7 days
-plt.plot(forecast_dates, predicted_close, label="Predicted Closing Price", linestyle='--', color='orange')
+        # Calculate average predicted price and compare to the last actual close
+        last_actual_close = self.df['Close'].iloc[-1]
+        avg_predicted_close = predicted_close.mean()
+        change_percent = ((avg_predicted_close - last_actual_close) / last_actual_close) * 100
+
+        # Assign friendly trend label
+        if change_percent > 1:
+            trend = "Positive Trend"
+        elif change_percent < -1:
+            trend = "Negative Trend"
+        else:
+            trend = "Stable"
+
+        return {
+            "trend": trend,
+            "change_percent": round(change_percent, 2),
+            "avg_predicted_close": round(avg_predicted_close, 2),
+            "last_actual_close": round(last_actual_close, 2)
+        }
+
+        #"The 7-day forecast indicates a stable trend, with an average projected closing price of $905.42, representing a slight decrease of 0.42% from the most recent close of $909.26."
+            
 
 
-plt.plot([last_date, forecast_dates[0]], [last_price, predicted_close[0]], linestyle='--', color='orange', alpha=0.6)
-plt.xlabel("Date")
-plt.ylabel("Stock Price")
-plt.title("Actual vs Predicted Closing Prices")
-plt.legend()
-plt.tight_layout()
-plt.show()
-plt.close('all')
+
+
+    
+
+    
+    
+        
+
+   
+
